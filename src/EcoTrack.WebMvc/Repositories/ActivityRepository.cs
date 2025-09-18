@@ -10,16 +10,19 @@ namespace EcoTrack.WebMvc.Repositories
 {
     public class ActivityRepository : GenericRepository<Activity>, IActivityRepository
     {
-        private readonly ApplicationDbContext _context;
-        public ActivityRepository(ApplicationDbContext context) { _context = context; }
-
-        public List<Activity> GetAll()
+        // No need for a private _context here, the base class already has a protected one.
+        public ActivityRepository(ApplicationDbContext context) : base(context) 
         {
-            // Include User data so the user's name can be displayed in the view.
-            return _context.Activities.Include(a => a.User).ToList();
         }
 
-        public Activity GetById(Guid id)
+        // This will now work correctly because the base method is virtual.
+        public override List<Activity> GetAll()
+        {
+            return _context.Activities.Include(a => a.User).ToList();
+        }
+        
+        // The return type is Activity? to match the base class and interface.
+        public override Activity? GetById(Guid id)
         {
             return _context.Activities.FirstOrDefault(a => a.ActivityId == id);
         }
@@ -29,14 +32,6 @@ namespace EcoTrack.WebMvc.Repositories
             return _context.Activities
                            .Include(a => a.User)
                            .Where(a => a.UserId == userId)
-                           .ToList();
-        }
-
-        // We can override GetAll() to add the .Include() logic
-        public new List<Activity> GetAll()
-        {
-            return _context.Activities
-                           .Include(a => a.User)
                            .ToList();
         }
     }

@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
@@ -18,29 +17,20 @@ namespace EcoTrack.WebMvc.Repositories
             _dbSet = context.Set<T>();
         }
 
-        public List<T> GetAll()
+        // FIX #1: Added the "virtual" keyword to allow overriding.
+        public virtual List<T> GetAll()
         {
             return _dbSet.ToList();
         }
 
-        public T GetById(Guid id)
+        // FIX #2: Changed return type to T? to handle cases where the item is not found.
+        public virtual T? GetById(Guid id)
         {
             return _dbSet.Find(id);
         }
 
-        public void Insert(T entity)
-        {
-            _dbSet.Add(entity);
-        }
-
-        public void Update(T entity)
-        {
-            _dbSet.Update(entity);
-        }
-
-        public void Delete(T entity)
-        {
-            _dbSet.Remove(entity);
-        }
+        public void Insert(T entity) => _dbSet.Add(entity);
+        public void Update(T entity) => _dbSet.Update(entity);
+        public void Delete(T entity) => _dbSet.Remove(entity);
     }
 }
