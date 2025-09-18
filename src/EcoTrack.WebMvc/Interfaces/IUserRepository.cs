@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using EcoTrack.WebMvc.Models.User;
+using EcoTrack.WebMvc.Models;
 
 namespace EcoTrack.WebMvc.Interfaces
 {
