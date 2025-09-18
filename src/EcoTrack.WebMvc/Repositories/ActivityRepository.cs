@@ -8,32 +8,27 @@ using EcoTrack.WebMvc.Models;
 
 namespace EcoTrack.WebMvc.Repositories
 {
-    public class ActivityRepository : IActivityRepository
+    public class ActivityRepository : GenericRepository<Activity>, IActivityRepository
     {
-        private readonly ApplicationDbContext _context;
-        public ActivityRepository(ApplicationDbContext context) { _context = context; }
-
-        public List<Activity> GetAll()
+        public ActivityRepository(ApplicationDbContext context) : base(context)
         {
-            // Include User data so the user's name can be displayed in the view.
-            return _context.Activities.Include(a => a.User).ToList();
         }
 
-        public Activity GetById(Guid id)
-        {
-            return _context.Activities.FirstOrDefault(a => a.ActivityId == id);
-        }
-
+        // We still need to implement the special method here.
         public List<Activity> GetByUserId(Guid userId)
         {
             return _context.Activities
-                .Include(a => a.User)
-                .Where(a => a.UserId == userId)
-                .ToList();
+                           .Include(a => a.User)
+                           .Where(a => a.UserId == userId)
+                           .ToList();
         }
 
-        public void Insert(Activity activity) => _context.Activities.Add(activity);
-        public void Update(Activity activity) => _context.Activities.Update(activity);
-        public void Delete(Activity activity) => _context.Activities.Remove(activity);
+        // We can override GetAll() to add the .Include() logic
+        public new List<Activity> GetAll()
+        {
+            return _context.Activities
+                           .Include(a => a.User)
+                           .ToList();
+        }
     }
 }

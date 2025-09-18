@@ -4,13 +4,9 @@ using EcoTrack.WebMvc.Models;
 
 namespace EcoTrack.WebMvc.Interfaces
 {
-    public interface IActivityRepository
+    public interface IActivityRepository : IGenericRepository<Activity>
     {
-        List<Activity> GetAll();
-        Activity GetById(Guid id);
+        // We can add methods here that ONLY apply to Activities.
         List<Activity> GetByUserId(Guid userId);
-        void Insert(Activity activity);
-        void Update(Activity activity);
-        void Delete(Activity activity);
     }
 }
