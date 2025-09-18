@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using EcoTrack.WebMvc.Entities;
+using EcoTrack.WebMvc.Models;
 
 namespace EcoTrack.WebMvc.Data
 {
