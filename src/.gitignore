@@ -1,0 +1,23 @@
+# Visual Studio / .NET Core template
+
+## Ignore build artifacts
+[Bb]in/
+[Oo]bj/
+
+## Ignore user-specific files
+*.user
+*.suo
+*.sln.docstates
+
+## Ignore IDE specific files
+.vs/
+.vscode/
+
+## Ignore secrets
+secrets.json
+appsettings.Development.json
+
+## Ignore other files
+*.lock.json
+*.db
+*.sqlite
