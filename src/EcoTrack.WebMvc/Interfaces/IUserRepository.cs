@@ -4,12 +4,7 @@ using EcoTrack.WebMvc.Models;
 
 namespace EcoTrack.WebMvc.Interfaces
 {
-    public interface IUserRepository
+   public interface IUserRepository : IGenericRepository<User>
     {
-        List<User> GetAll();
-        User GetById(Guid id);
-        void Insert(User user);
-        void Update(User user);
-        void Delete(User user);
     }
 }
