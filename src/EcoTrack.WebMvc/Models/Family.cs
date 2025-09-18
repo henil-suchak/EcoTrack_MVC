@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace EcoTrack.WebMvc.Entities
+namespace EcoTrack.WebMvc.Models
 {
     public class Family
     {

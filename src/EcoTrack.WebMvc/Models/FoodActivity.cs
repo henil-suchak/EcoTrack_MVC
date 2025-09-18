@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace EcoTrack.WebMvc.Entities
+namespace EcoTrack.WebMvc.Models
 {
     public class FoodActivity : Activity
     {

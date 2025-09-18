@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using EcoTrack.WebMvc.Enums; // Assuming your enums are moved here
 
-namespace EcoTrack.WebMvc.Entities
+namespace EcoTrack.WebMvc.Models
 {
     public abstract class Activity
     {
