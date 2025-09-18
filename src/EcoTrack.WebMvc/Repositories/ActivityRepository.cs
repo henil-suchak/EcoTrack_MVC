@@ -19,7 +19,7 @@ namespace EcoTrack.WebMvc.Repositories
             return _context.Activities.Include(a => a.User).ToList();
         }
 
-        public Activity GetById(Guid id)
+        public Activity? GetById(Guid id)
         {
             return _context.Activities.FirstOrDefault(a => a.ActivityId == id);
         }
