@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using EcoTrack.WebMvc.Data;
 using EcoTrack.WebMvc.Interfaces;
@@ -8,31 +9,30 @@ using EcoTrack.WebMvc.Models;
 
 namespace EcoTrack.WebMvc.Repositories
 {
-    public class ActivityRepository : GenericRepository<Activity>, IActivityRepository
+    // UPDATED: Inherits from the new generic repository with the key type
+    public class ActivityRepository : GenericRepository<Activity, Guid>, IActivityRepository
     {
-        // No need for a private _context here, the base class already has a protected one.
         public ActivityRepository(ApplicationDbContext context) : base(context) 
         {
         }
 
-        // This will now work correctly because the base method is virtual.
-        public override List<Activity> GetAll()
+        // UPDATED: Overriding the new async base method
+        public override async Task<IEnumerable<Activity>> GetAllAsync()
         {
-            return _context.Activities.Include(a => a.User).ToList();
+            // Your Include() is a great addition for loading related User data. Let's keep it.
+            return await _context.Activities.Include(a => a.User).ToListAsync();
         }
         
-        // The return type is Activity? to match the base class and interface.
-        public override Activity? GetById(Guid id)
+        // NOTE: GetByIdAsync is now inherited from the generic base class.
+        // You only need to override it if you want to add an .Include() here as well.
+        
+        // UPDATED: Custom method is now async
+        public async Task<IEnumerable<Activity>> GetByUserIdAsync(Guid userId)
         {
-            return _context.Activities.FirstOrDefault(a => a.ActivityId == id);
-        }
-
-        public List<Activity> GetByUserId(Guid userId)
-        {
-            return _context.Activities
+            return await _context.Activities
                            .Include(a => a.User)
                            .Where(a => a.UserId == userId)
-                           .ToList();
+                           .ToListAsync();
         }
     }
 }

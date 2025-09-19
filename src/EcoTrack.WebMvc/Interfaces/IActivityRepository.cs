@@ -1,12 +1,14 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using EcoTrack.WebMvc.Models;
 
 namespace EcoTrack.WebMvc.Interfaces
 {
-    public interface IActivityRepository : IGenericRepository<Activity>
+    // No changes needed here, it's already using the new generic interface
+    public interface IActivityRepository : IGenericRepository<Activity, Guid>
     {
-        // We can add methods here that ONLY apply to Activities.
-        List<Activity> GetByUserId(Guid userId);
+        // UPDATED: Method renamed to follow the async convention
+        Task<IEnumerable<Activity>> GetByUserIdAsync(Guid userId);
     }
 }

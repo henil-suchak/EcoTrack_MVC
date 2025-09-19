@@ -4,7 +4,7 @@ using EcoTrack.WebMvc.Models;
 
 namespace EcoTrack.WebMvc.Interfaces
 {
-   public interface IUserRepository : IGenericRepository<User>
+   public interface IUserRepository : IGenericRepository<User,Guid>
     {
     }
 }
