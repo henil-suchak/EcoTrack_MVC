@@ -1,20 +1,37 @@
-// Add these using statements for Entity Framework Core
+// --- Add all necessary using statements ---
 using Microsoft.EntityFrameworkCore;
 using EcoTrack.WebMvc.Data;
+using EcoTrack.WebMvc.Interfaces;
+using EcoTrack.WebMvc.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// --- START: Add Database Configuration ---
-// This defines the connection to your SQLite database.
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? "Data Source=ecotrack.db";
+// --- START: Service Registration ---
 
-// This registers your ApplicationDbContext with the application's services.
+// 1. Add services for the MVC framework.
+builder.Services.AddControllersWithViews();
+
+// 2. Configure the database connection (DbContext).
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? "Data Source=ecotrack.db";
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlite(connectionString));
-// --- END: Add Database Configuration ---
 
-// Add services to the container.
-builder.Services.AddControllersWithViews();
+// Register your repositories
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IActivityRepository, ActivityRepository>();
+builder.Services.AddScoped<IBadgeRepository, BadgeRepository>();
+builder.Services.AddScoped<ISuggestionRepository, SuggestionRepository>();
+// builder.Services.AddScoped<ILeaderboardEntryRepository, LeaderboardEntryRepository>(); // ADD THIS LINE
+
+// Register the Unit of Work
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+// Add other repository interfaces and classes here as you create them...
+// For example:
+// builder.Services.AddScoped<ISuggestionRepository, SuggestionRepository>(); 
+
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+// --- END: Service Registration ---
 
 var app = builder.Build();
 
@@ -22,12 +39,11 @@ var app = builder.Build();
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
 app.UseHttpsRedirection();
-app.UseStaticFiles(); // This is the standard way to enable CSS, JS, etc.
+app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthorization();
