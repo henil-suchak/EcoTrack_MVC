@@ -2,7 +2,6 @@ using System;
 using System.Threading.Tasks;
 using EcoTrack.WebMvc.Interfaces;
 using EcoTrack.WebMvc.Models;
-using EcoTrack.WebMvc.Enums; // Ensure you have this using for ActivityType
 
 namespace EcoTrack.WebMvc.Services
 {
@@ -22,10 +21,7 @@ namespace EcoTrack.WebMvc.Services
                 throw new ArgumentNullException(nameof(activity));
             }
 
-            // 1. Get the correct 'subType' for the factor lookup (e.g., "Car", "Beef").
             string subType = GetSubTypeForActivity(activity);
-
-            // 2. Use the repository to find the emission factor.
             var factor = await _unitOfWork.EmissionFactorRepository.GetFactorAsync(
                 activity.ActivityType.ToString(), 
                 subType);
@@ -34,33 +30,52 @@ namespace EcoTrack.WebMvc.Services
             {
                 throw new InvalidOperationException($"Could not find a valid emission factor for {activity.ActivityType} with subtype {subType}.");
             }
+            
+            // --- THIS IS THE FIX ---
+            // Before calculating, assign the found factor's ID to the activity's foreign key.
+            // We use a switch to access the property on the correct derived type.
+            switch (activity)
+            {
+                case TravelActivity ta:
+                    ta.EmissionFactorId = factor.EmissionFactorId;
+                    break;
+                case FoodActivity fa:
+                    fa.EmissionFactorId = factor.EmissionFactorId;
+                    break;
+                case ElectricityActivity ea:
+                    ea.EmissionFactorId = factor.EmissionFactorId;
+                    break;
+                case ApplianceActivity aa:
+                    aa.EmissionFactorId = factor.EmissionFactorId;
+                    break;
+                case WasteActivity wa:
+                    wa.EmissionFactorId = factor.EmissionFactorId;
+                    break;
+            }
 
-            // 3. Perform the calculation based on the specific activity type.
             activity.CarbonEmission = CalculateEmission(activity, factor.Value);
             activity.DateTime = DateTime.UtcNow;
 
-            // 4. Use the repository to save the final object.
             await _unitOfWork.ActivityRepository.AddAsync(activity);
             await _unitOfWork.CompleteAsync();
 
             return activity;
         }
 
-        // Helper method to get the specific subtype from an activity
+        // ... GetSubTypeForActivity and CalculateEmission methods are the same ...
         private string GetSubTypeForActivity(Activity activity)
         {
             return activity switch
             {
                 TravelActivity ta => ta.Mode,
                 FoodActivity fa => fa.FoodType,
-                ElectricityActivity => "Grid", // Or based on a region property
+                ElectricityActivity => "Grid",
                 ApplianceActivity aa => aa.ApplianceType,
                 WasteActivity wa => wa.WasteType,
                 _ => throw new NotSupportedException("Activity type not supported.")
             };
         }
 
-        // Helper method to perform the correct calculation
         private decimal CalculateEmission(Activity activity, decimal factorValue)
         {
             return activity switch

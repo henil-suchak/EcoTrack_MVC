@@ -19,7 +19,7 @@ namespace EcoTrack.WebMvc.Models
         public string Source { get; set; } = string.Empty; // "home-cooked", "restaurant"
         
         // Foreign Key to the EmissionFactor entity
-        public int EmissionFactorId { get; set; }
+        public Guid EmissionFactorId { get; set; }
         
         // Navigation property
         public EmissionFactor? EmissionFactor { get; set; }

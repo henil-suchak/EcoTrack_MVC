@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using EcoTrack.WebMvc.Data;
 using EcoTrack.WebMvc.Interfaces;
 using EcoTrack.WebMvc.Repositories;
+using EcoTrack.WebMvc.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,22 +17,24 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlite(connectionString));
 
-// Register your repositories
+// 3. Register all your repositories.
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IActivityRepository, ActivityRepository>();
 builder.Services.AddScoped<IBadgeRepository, BadgeRepository>();
 builder.Services.AddScoped<ISuggestionRepository, SuggestionRepository>();
-builder.Services.AddScoped<ILeaderboardEntryRepository, LeaderboardEntryRepository>(); // ADD THIS LINE
+builder.Services.AddScoped<ILeaderboardEntryRepository, LeaderboardEntryRepository>();
 builder.Services.AddScoped<IFamilyRepository, FamilyRepository>();
-builder.Services.AddScoped<IEmissionFactorRepository, EmissionFactorRepository>(); // ADD THIS LINE
+builder.Services.AddScoped<IEmissionFactorRepository, EmissionFactorRepository>();
 
-// Register the Unit of Work
+// 4. Register the Unit of Work.
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-// Add other repository interfaces and classes here as you create them...
-// For example:
-// builder.Services.AddScoped<ISuggestionRepository, SuggestionRepository>(); 
 
+// 5. Register your services. (THIS SECTION WAS MISSING)
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IActivityService, ActivityService>();
 
+// 6. Register AutoMapper.
+builder.Services.AddAutoMapper(typeof(MappingProfile));
 
 // --- END: Service Registration ---
 

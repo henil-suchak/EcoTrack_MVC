@@ -18,7 +18,7 @@ namespace EcoTrack.WebMvc.Models
         public decimal PowerRating { get; set; } // in watts
         
         // Foreign Key to the EmissionFactor entity
-        public int EmissionFactorId { get; set; }
+        public Guid EmissionFactorId { get; set; }
         
         // Navigation property
         public EmissionFactor? EmissionFactor { get; set; }

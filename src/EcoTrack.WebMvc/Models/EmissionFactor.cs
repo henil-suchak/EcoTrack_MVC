@@ -6,7 +6,7 @@ namespace EcoTrack.WebMvc.Models
     public class EmissionFactor
     {
         // This is the Primary Key for the database table.
-        public int EmissionFactorId { get; set; }
+        public Guid EmissionFactorId { get; set; }
 
         // Attributes like [Required] and [StringLength] help define the database schema.
         // For example, StringLength(100) often translates to NVARCHAR(100) in SQL.

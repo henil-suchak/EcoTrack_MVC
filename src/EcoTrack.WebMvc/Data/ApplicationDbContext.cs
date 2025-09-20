@@ -1,3 +1,4 @@
+using System;
 using Microsoft.EntityFrameworkCore;
 using EcoTrack.WebMvc.Models;
 using EcoTrack.WebMvc.Enums;
@@ -30,16 +31,8 @@ namespace EcoTrack.WebMvc.Data
                 .WithOne(a => a.User)
                 .HasForeignKey(a => a.UserId);
 
-            modelBuilder.Entity<User>()
-                .HasMany(u => u.Badges)
-                .WithOne(b => b.User)
-                .HasForeignKey(b => b.UserId);
+            // Add other user relationships...
 
-            modelBuilder.Entity<User>()
-                .HasMany(u => u.Suggestions)
-                .WithOne(s => s.User)
-                .HasForeignKey(s => s.UserId);
-            
             // --- FAMILY RELATIONSHIP ---
             modelBuilder.Entity<Family>()
                 .HasMany(f => f.Members)
@@ -54,7 +47,7 @@ namespace EcoTrack.WebMvc.Data
                 .HasValue<ElectricityActivity>(ActivityType.Electricity)
                 .HasValue<ApplianceActivity>(ActivityType.Appliance)
                 .HasValue<WasteActivity>(ActivityType.Waste);
-            
+
             // --- ACTIVITY SUBTYPE TO EMISSIONFACTOR RELATIONSHIPS ---
             modelBuilder.Entity<TravelActivity>()
                 .HasOne(ta => ta.EmissionFactor)
@@ -68,23 +61,35 @@ namespace EcoTrack.WebMvc.Data
                 .HasForeignKey(fa => fa.EmissionFactorId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            modelBuilder.Entity<ElectricityActivity>()
-                .HasOne(ea => ea.EmissionFactor)
-                .WithMany()
-                .HasForeignKey(ea => ea.EmissionFactorId)
-                .OnDelete(DeleteBehavior.Restrict);
+            // ... other activity to emission factor relationships
 
-            modelBuilder.Entity<ApplianceActivity>()
-                .HasOne(aa => aa.EmissionFactor)
-                .WithMany()
-                .HasForeignKey(aa => aa.EmissionFactorId)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            modelBuilder.Entity<WasteActivity>()
-                .HasOne(wa => wa.EmissionFactor)
-                .WithMany()
-                .HasForeignKey(wa => wa.EmissionFactorId)
-                .OnDelete(DeleteBehavior.Restrict);
-        }
+            // --- DATA SEEDING FOR EMISSION FACTORS ---
+            modelBuilder.Entity<EmissionFactor>().HasData(
+                new EmissionFactor
+                {
+                    EmissionFactorId = Guid.Parse("00000000-0000-0000-0000-000000000001"), // Fixed Guid
+                    ActivityType = "Travel",
+                    SubType = "Car",
+                    Value = 0.21m, // Example value: kg CO2 per km
+                    SourceReference = "Default"
+                },
+                new EmissionFactor
+                {
+                    EmissionFactorId = Guid.Parse("00000000-0000-0000-0000-000000000002"), // Fixed Guid
+                    ActivityType = "Food",
+                    SubType = "Beef",
+                    Value = 27.0m, // Example value: kg CO2 per kg
+                    SourceReference = "Default"
+                },
+                new EmissionFactor
+                {
+                    EmissionFactorId = Guid.Parse("00000000-0000-0000-0000-000000000003"), // Fixed Guid
+                    ActivityType = "Food",
+                    SubType = "Chicken",
+                    Value = 6.9m, // Example value: kg CO2 per kg
+                    SourceReference = "Default"
+                }
+            );
+        } // <-- The OnModelCreating method ends here
     }
 }

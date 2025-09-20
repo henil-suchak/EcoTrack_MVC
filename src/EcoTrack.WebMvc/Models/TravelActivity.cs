@@ -23,7 +23,7 @@ namespace EcoTrack.WebMvc.Models
         public string? LocationEnd { get; set; }
         
         // Foreign Key to the specific emission factor used
-        public int EmissionFactorId { get; set; }
+        public Guid EmissionFactorId { get; set; }
         
         // Navigation property
         public EmissionFactor? EmissionFactor { get; set; }
