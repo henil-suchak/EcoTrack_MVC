@@ -12,7 +12,7 @@ namespace EcoTrack.WebMvc.Repositories
     // UPDATED: Inherits from the new generic repository with the key type
     public class ActivityRepository : GenericRepository<Activity, Guid>, IActivityRepository
     {
-        public ActivityRepository(ApplicationDbContext context) : base(context) 
+        public ActivityRepository(ApplicationDbContext context) : base(context)
         {
         }
 
@@ -22,10 +22,10 @@ namespace EcoTrack.WebMvc.Repositories
             // Your Include() is a great addition for loading related User data. Let's keep it.
             return await _context.Activities.Include(a => a.User).ToListAsync();
         }
-        
+
         // NOTE: GetByIdAsync is now inherited from the generic base class.
         // You only need to override it if you want to add an .Include() here as well.
-        
+
         // UPDATED: Custom method is now async
         public async Task<IEnumerable<Activity>> GetByUserIdAsync(Guid userId)
         {
@@ -34,5 +34,17 @@ namespace EcoTrack.WebMvc.Repositories
                            .Where(a => a.UserId == userId)
                            .ToListAsync();
         }
+        public async Task<IEnumerable<Activity>> GetActivitiesByUserIdSince(Guid userId, DateTime sinceDate)
+        {
+            return await _context.Activities
+                .Where(a => a.UserId == userId && a.DateTime >= sinceDate)
+                .ToListAsync();
+        }
+        public async Task<IEnumerable<Activity>> GetActivitiesSince(DateTime sinceDate)
+    {
+        return await _context.Activities
+            .Where(a => a.DateTime >= sinceDate)
+            .ToListAsync();
+    }
     }
 }

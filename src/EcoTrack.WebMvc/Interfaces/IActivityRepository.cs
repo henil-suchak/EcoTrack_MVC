@@ -10,5 +10,7 @@ namespace EcoTrack.WebMvc.Interfaces
     {
         // UPDATED: Method renamed to follow the async convention
         Task<IEnumerable<Activity>> GetByUserIdAsync(Guid userId);
+        Task<IEnumerable<Activity>> GetActivitiesByUserIdSince(Guid userId, DateTime sinceDate);
+        Task<IEnumerable<Activity>> GetActivitiesSince(DateTime sinceDate);
     }
 }

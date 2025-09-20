@@ -26,12 +26,16 @@ builder.Services.AddScoped<ILeaderboardEntryRepository, LeaderboardEntryReposito
 builder.Services.AddScoped<IFamilyRepository, FamilyRepository>();
 builder.Services.AddScoped<IEmissionFactorRepository, EmissionFactorRepository>();
 
+
 // 4. Register the Unit of Work.
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 // 5. Register your services. (THIS SECTION WAS MISSING)
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IActivityService, ActivityService>();
+builder.Services.AddScoped<ISuggestionService, SuggestionService>();
+builder.Services.AddScoped<ILeaderboardService, LeaderboardService>();
+builder.Services.AddScoped<IBadgeService, BadgeService>(); 
 
 // 6. Register AutoMapper.
 builder.Services.AddAutoMapper(typeof(MappingProfile));

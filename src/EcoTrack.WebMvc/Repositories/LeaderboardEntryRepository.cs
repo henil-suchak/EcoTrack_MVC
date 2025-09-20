@@ -18,6 +18,7 @@ namespace EcoTrack.WebMvc.Repositories
         public async Task<IEnumerable<LeaderboardEntry>> GetTopEntriesAsync(string period, int count)
         {
             return await _context.LeaderboardEntries
+                .Include(e => e.User)
                 .Where(e => e.Period == period)
                 .OrderBy(e => e.Rank)
                 .Take(count)
