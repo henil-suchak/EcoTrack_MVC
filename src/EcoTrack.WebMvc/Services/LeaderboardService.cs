@@ -48,7 +48,7 @@ namespace EcoTrack.WebMvc.Services
                 throw new ArgumentException("Invalid period specified. Use 'Weekly' or 'Monthly'.");
             }
 
-            // ✅ FIX 2: This now calls the correct method to get activities for ALL users
+           
             var recentActivities = await _unitOfWork.ActivityRepository.GetActivitiesSince(startDate);
 
             var userEmissions = recentActivities

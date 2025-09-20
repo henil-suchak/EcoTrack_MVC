@@ -41,9 +41,15 @@ namespace EcoTrack.WebMvc.Repositories
                 .ToListAsync();
         }
         public async Task<IEnumerable<Activity>> GetActivitiesSince(DateTime sinceDate)
+        {
+            return await _context.Activities
+                .Where(a => a.DateTime >= sinceDate)
+                .ToListAsync();
+        }
+     public async Task<IEnumerable<Activity>> GetActivitiesForUserListSince(List<Guid> userIds, DateTime sinceDate)
     {
         return await _context.Activities
-            .Where(a => a.DateTime >= sinceDate)
+            .Where(a => userIds.Contains(a.UserId) && a.DateTime >= sinceDate)
             .ToListAsync();
     }
     }
