@@ -21,7 +21,9 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IActivityRepository, ActivityRepository>();
 builder.Services.AddScoped<IBadgeRepository, BadgeRepository>();
 builder.Services.AddScoped<ISuggestionRepository, SuggestionRepository>();
-// builder.Services.AddScoped<ILeaderboardEntryRepository, LeaderboardEntryRepository>(); // ADD THIS LINE
+builder.Services.AddScoped<ILeaderboardEntryRepository, LeaderboardEntryRepository>(); // ADD THIS LINE
+builder.Services.AddScoped<IFamilyRepository, FamilyRepository>();
+builder.Services.AddScoped<IEmissionFactorRepository, EmissionFactorRepository>(); // ADD THIS LINE
 
 // Register the Unit of Work
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
@@ -29,7 +31,7 @@ builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 // For example:
 // builder.Services.AddScoped<ISuggestionRepository, SuggestionRepository>(); 
 
-builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
 
 // --- END: Service Registration ---
 

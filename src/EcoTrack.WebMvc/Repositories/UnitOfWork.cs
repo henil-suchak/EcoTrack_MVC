@@ -12,10 +12,14 @@ namespace EcoTrack.WebMvc.Repositories
         private IBadgeRepository? _badgeRepository;
         private ISuggestionRepository? _suggestionRepository;
         private ILeaderboardEntryRepository? _leaderboardEntryRepository; // ADD THIS LINE BACK
+        private IEmissionFactorRepository? _emissionFactorRepository;
+        private IFamilyRepository? _familyEntryRepository;
+        
 
-        public UnitOfWork(ApplicationDbContext context) 
+
+        public UnitOfWork(ApplicationDbContext context)
         {
-            _context = context; 
+            _context = context;
         }
 
         public IUserRepository UserRepository => _userRepository ??= new UserRepository(_context);
@@ -23,8 +27,15 @@ namespace EcoTrack.WebMvc.Repositories
         public IBadgeRepository BadgeRepository => _badgeRepository ??= new BadgeRepository(_context);
         public ISuggestionRepository SuggestionRepository => _suggestionRepository ??= new SuggestionRepository(_context);
         public ILeaderboardEntryRepository LeaderboardEntryRepository => _leaderboardEntryRepository ??= new LeaderboardEntryRepository(_context); // ADD THIS LINE BACK
+        
+        public IEmissionFactorRepository EmissionFactorRepository => _emissionFactorRepository ??= new EmissionFactorRepository(_context);
 
-        public void Save() => _context.SaveChanges();
+        
+        public IFamilyRepository FamilyRepository => _familyEntryRepository ??= new FamilyRepository(_context);
+        public async Task<int> CompleteAsync()
+        {
+            return await _context.SaveChangesAsync();
+        }
         public void Dispose() => _context.Dispose();
     }
 }

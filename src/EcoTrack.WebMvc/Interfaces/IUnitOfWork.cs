@@ -6,8 +6,12 @@ namespace EcoTrack.WebMvc.Interfaces
         IActivityRepository ActivityRepository { get; }
         IBadgeRepository BadgeRepository { get; }
         ISuggestionRepository SuggestionRepository { get; }
-        ILeaderboardEntryRepository LeaderboardEntryRepository { get; } // ADD THIS LINE BACK
+        ILeaderboardEntryRepository LeaderboardEntryRepository { get; }
 
-        void Save();
+        IEmissionFactorRepository EmissionFactorRepository { get; }
+        IFamilyRepository FamilyRepository { get; }
+
+        Task<int> CompleteAsync();
+        // void Save();
     }
 }

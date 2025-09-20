@@ -4,7 +4,8 @@ using EcoTrack.WebMvc.Models;
 
 namespace EcoTrack.WebMvc.Interfaces
 {
-   public interface IUserRepository : IGenericRepository<User,Guid>
+    public interface IUserRepository : IGenericRepository<User, Guid>
     {
+        Task<User?> GetUserByEmailAsync(string email);
     }
 }
