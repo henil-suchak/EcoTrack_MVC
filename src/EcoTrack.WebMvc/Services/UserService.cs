@@ -45,5 +45,30 @@ namespace EcoTrack.WebMvc.Services
 
             return newUser;
         }
+        // In src/EcoTrack.WebMvc/Services/UserService.cs
+        public async Task<User?> LoginAsync(string email, string password)
+        {
+            // 1. Find the user by email using the repository
+            var user = await _unitOfWork.UserRepository.GetUserByEmailAsync(email);
+            if (user == null)
+            {
+                return null; // User not found
+            }
+
+            // 2. Verify the password
+            // In a real app, you would use a library like BCrypt.Net to compare
+            // the input password with the stored hash.
+            // e.g., bool isPasswordCorrect = BCrypt.Net.BCrypt.Verify(password, user.PasswordHash);
+
+            // This is our temporary placeholder logic for now:
+            var hashedPassword = $"HASHED_{password}";
+            if (user.PasswordHash != hashedPassword)
+            {
+                return null; // Password does not match
+            }
+
+            // 3. If password is correct, return the user object
+            return user;
+        }
     }
 }

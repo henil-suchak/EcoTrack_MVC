@@ -17,7 +17,7 @@ namespace EcoTrack.WebMvc.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.9");
 
-            modelBuilder.Entity("EcoTrack.WebMvc.Entities.Activity", b =>
+            modelBuilder.Entity("EcoTrack.WebMvc.Models.Activity", b =>
                 {
                     b.Property<Guid>("ActivityId")
                         .ValueGeneratedOnAdd()
@@ -32,11 +32,6 @@ namespace EcoTrack.WebMvc.Migrations
                     b.Property<DateTime>("DateTime")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Discriminator")
-                        .IsRequired()
-                        .HasMaxLength(21)
-                        .HasColumnType("TEXT");
-
                     b.Property<Guid>("UserId")
                         .HasColumnType("TEXT");
 
@@ -46,12 +41,12 @@ namespace EcoTrack.WebMvc.Migrations
 
                     b.ToTable("Activities");
 
-                    b.HasDiscriminator().HasValue("Activity");
+                    b.HasDiscriminator<int>("ActivityType");
 
                     b.UseTphMappingStrategy();
                 });
 
-            modelBuilder.Entity("EcoTrack.WebMvc.Entities.Badge", b =>
+            modelBuilder.Entity("EcoTrack.WebMvc.Models.Badge", b =>
                 {
                     b.Property<Guid>("BadgeId")
                         .ValueGeneratedOnAdd()
@@ -90,11 +85,11 @@ namespace EcoTrack.WebMvc.Migrations
                     b.ToTable("Badges");
                 });
 
-            modelBuilder.Entity("EcoTrack.WebMvc.Entities.EmissionFactor", b =>
+            modelBuilder.Entity("EcoTrack.WebMvc.Models.EmissionFactor", b =>
                 {
-                    b.Property<int>("EmissionFactorId")
+                    b.Property<Guid>("EmissionFactorId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("ActivityType")
                         .IsRequired()
@@ -121,9 +116,35 @@ namespace EcoTrack.WebMvc.Migrations
                     b.HasKey("EmissionFactorId");
 
                     b.ToTable("EmissionFactors");
+
+                    b.HasData(
+                        new
+                        {
+                            EmissionFactorId = new Guid("00000000-0000-0000-0000-000000000001"),
+                            ActivityType = "Travel",
+                            SourceReference = "Default",
+                            SubType = "Car",
+                            Value = 0.21m
+                        },
+                        new
+                        {
+                            EmissionFactorId = new Guid("00000000-0000-0000-0000-000000000002"),
+                            ActivityType = "Food",
+                            SourceReference = "Default",
+                            SubType = "Beef",
+                            Value = 27.0m
+                        },
+                        new
+                        {
+                            EmissionFactorId = new Guid("00000000-0000-0000-0000-000000000003"),
+                            ActivityType = "Food",
+                            SourceReference = "Default",
+                            SubType = "Chicken",
+                            Value = 6.9m
+                        });
                 });
 
-            modelBuilder.Entity("EcoTrack.WebMvc.Entities.Family", b =>
+            modelBuilder.Entity("EcoTrack.WebMvc.Models.Family", b =>
                 {
                     b.Property<Guid>("FamilyId")
                         .ValueGeneratedOnAdd()
@@ -142,7 +163,7 @@ namespace EcoTrack.WebMvc.Migrations
                     b.ToTable("Families");
                 });
 
-            modelBuilder.Entity("EcoTrack.WebMvc.Entities.LeaderboardEntry", b =>
+            modelBuilder.Entity("EcoTrack.WebMvc.Models.LeaderboardEntry", b =>
                 {
                     b.Property<int>("LeaderboardEntryId")
                         .ValueGeneratedOnAdd()
@@ -172,7 +193,7 @@ namespace EcoTrack.WebMvc.Migrations
                     b.ToTable("LeaderboardEntries");
                 });
 
-            modelBuilder.Entity("EcoTrack.WebMvc.Entities.Suggestion", b =>
+            modelBuilder.Entity("EcoTrack.WebMvc.Models.Suggestion", b =>
                 {
                     b.Property<Guid>("SuggestionId")
                         .ValueGeneratedOnAdd()
@@ -207,7 +228,7 @@ namespace EcoTrack.WebMvc.Migrations
                     b.ToTable("Suggestions");
                 });
 
-            modelBuilder.Entity("EcoTrack.WebMvc.Entities.User", b =>
+            modelBuilder.Entity("EcoTrack.WebMvc.Models.User", b =>
                 {
                     b.Property<Guid>("UserId")
                         .ValueGeneratedOnAdd()
@@ -251,17 +272,17 @@ namespace EcoTrack.WebMvc.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("EcoTrack.WebMvc.Entities.ApplianceActivity", b =>
+            modelBuilder.Entity("EcoTrack.WebMvc.Models.ApplianceActivity", b =>
                 {
-                    b.HasBaseType("EcoTrack.WebMvc.Entities.Activity");
+                    b.HasBaseType("EcoTrack.WebMvc.Models.Activity");
 
                     b.Property<string>("ApplianceType")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("EmissionFactorId")
-                        .HasColumnType("INTEGER");
+                    b.Property<Guid>("EmissionFactorId")
+                        .HasColumnType("TEXT");
 
                     b.Property<decimal>("PowerRating")
                         .HasColumnType("decimal(18, 2)");
@@ -271,18 +292,18 @@ namespace EcoTrack.WebMvc.Migrations
 
                     b.HasIndex("EmissionFactorId");
 
-                    b.HasDiscriminator().HasValue("ApplianceActivity");
+                    b.HasDiscriminator().HasValue(3);
                 });
 
-            modelBuilder.Entity("EcoTrack.WebMvc.Entities.ElectricityActivity", b =>
+            modelBuilder.Entity("EcoTrack.WebMvc.Models.ElectricityActivity", b =>
                 {
-                    b.HasBaseType("EcoTrack.WebMvc.Entities.Activity");
+                    b.HasBaseType("EcoTrack.WebMvc.Models.Activity");
 
                     b.Property<decimal>("Consumption")
                         .HasColumnType("decimal(18, 2)");
 
-                    b.Property<int>("EmissionFactorId")
-                        .HasColumnType("INTEGER");
+                    b.Property<Guid>("EmissionFactorId")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("SourceType")
                         .IsRequired()
@@ -297,15 +318,15 @@ namespace EcoTrack.WebMvc.Migrations
                                 .HasColumnName("ElectricityActivity_EmissionFactorId");
                         });
 
-                    b.HasDiscriminator().HasValue("ElectricityActivity");
+                    b.HasDiscriminator().HasValue(2);
                 });
 
-            modelBuilder.Entity("EcoTrack.WebMvc.Entities.FoodActivity", b =>
+            modelBuilder.Entity("EcoTrack.WebMvc.Models.FoodActivity", b =>
                 {
-                    b.HasBaseType("EcoTrack.WebMvc.Entities.Activity");
+                    b.HasBaseType("EcoTrack.WebMvc.Models.Activity");
 
-                    b.Property<int>("EmissionFactorId")
-                        .HasColumnType("INTEGER");
+                    b.Property<Guid>("EmissionFactorId")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("FoodType")
                         .IsRequired()
@@ -328,18 +349,18 @@ namespace EcoTrack.WebMvc.Migrations
                                 .HasColumnName("FoodActivity_EmissionFactorId");
                         });
 
-                    b.HasDiscriminator().HasValue("FoodActivity");
+                    b.HasDiscriminator().HasValue(1);
                 });
 
-            modelBuilder.Entity("EcoTrack.WebMvc.Entities.TravelActivity", b =>
+            modelBuilder.Entity("EcoTrack.WebMvc.Models.TravelActivity", b =>
                 {
-                    b.HasBaseType("EcoTrack.WebMvc.Entities.Activity");
+                    b.HasBaseType("EcoTrack.WebMvc.Models.Activity");
 
                     b.Property<decimal>("Distance")
                         .HasColumnType("decimal(18, 2)");
 
-                    b.Property<int>("EmissionFactorId")
-                        .HasColumnType("INTEGER");
+                    b.Property<Guid>("EmissionFactorId")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("FuelType")
                         .HasMaxLength(50)
@@ -366,18 +387,18 @@ namespace EcoTrack.WebMvc.Migrations
                                 .HasColumnName("TravelActivity_EmissionFactorId");
                         });
 
-                    b.HasDiscriminator().HasValue("TravelActivity");
+                    b.HasDiscriminator().HasValue(0);
                 });
 
-            modelBuilder.Entity("EcoTrack.WebMvc.Entities.WasteActivity", b =>
+            modelBuilder.Entity("EcoTrack.WebMvc.Models.WasteActivity", b =>
                 {
-                    b.HasBaseType("EcoTrack.WebMvc.Entities.Activity");
+                    b.HasBaseType("EcoTrack.WebMvc.Models.Activity");
 
                     b.Property<decimal>("Amount")
                         .HasColumnType("decimal(18, 2)");
 
-                    b.Property<int>("EmissionFactorId")
-                        .HasColumnType("INTEGER");
+                    b.Property<Guid>("EmissionFactorId")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("WasteType")
                         .IsRequired()
@@ -392,12 +413,12 @@ namespace EcoTrack.WebMvc.Migrations
                                 .HasColumnName("WasteActivity_EmissionFactorId");
                         });
 
-                    b.HasDiscriminator().HasValue("WasteActivity");
+                    b.HasDiscriminator().HasValue(4);
                 });
 
-            modelBuilder.Entity("EcoTrack.WebMvc.Entities.Activity", b =>
+            modelBuilder.Entity("EcoTrack.WebMvc.Models.Activity", b =>
                 {
-                    b.HasOne("EcoTrack.WebMvc.Entities.User", "User")
+                    b.HasOne("EcoTrack.WebMvc.Models.User", "User")
                         .WithMany("Activities")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -406,9 +427,9 @@ namespace EcoTrack.WebMvc.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("EcoTrack.WebMvc.Entities.Badge", b =>
+            modelBuilder.Entity("EcoTrack.WebMvc.Models.Badge", b =>
                 {
-                    b.HasOne("EcoTrack.WebMvc.Entities.User", "User")
+                    b.HasOne("EcoTrack.WebMvc.Models.User", "User")
                         .WithMany("Badges")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -417,9 +438,9 @@ namespace EcoTrack.WebMvc.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("EcoTrack.WebMvc.Entities.LeaderboardEntry", b =>
+            modelBuilder.Entity("EcoTrack.WebMvc.Models.LeaderboardEntry", b =>
                 {
-                    b.HasOne("EcoTrack.WebMvc.Entities.User", "User")
+                    b.HasOne("EcoTrack.WebMvc.Models.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -428,9 +449,9 @@ namespace EcoTrack.WebMvc.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("EcoTrack.WebMvc.Entities.Suggestion", b =>
+            modelBuilder.Entity("EcoTrack.WebMvc.Models.Suggestion", b =>
                 {
-                    b.HasOne("EcoTrack.WebMvc.Entities.User", "User")
+                    b.HasOne("EcoTrack.WebMvc.Models.User", "User")
                         .WithMany("Suggestions")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -439,18 +460,18 @@ namespace EcoTrack.WebMvc.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("EcoTrack.WebMvc.Entities.User", b =>
+            modelBuilder.Entity("EcoTrack.WebMvc.Models.User", b =>
                 {
-                    b.HasOne("EcoTrack.WebMvc.Entities.Family", "Family")
+                    b.HasOne("EcoTrack.WebMvc.Models.Family", "Family")
                         .WithMany("Members")
                         .HasForeignKey("FamilyId");
 
                     b.Navigation("Family");
                 });
 
-            modelBuilder.Entity("EcoTrack.WebMvc.Entities.ApplianceActivity", b =>
+            modelBuilder.Entity("EcoTrack.WebMvc.Models.ApplianceActivity", b =>
                 {
-                    b.HasOne("EcoTrack.WebMvc.Entities.EmissionFactor", "EmissionFactor")
+                    b.HasOne("EcoTrack.WebMvc.Models.EmissionFactor", "EmissionFactor")
                         .WithMany()
                         .HasForeignKey("EmissionFactorId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -459,9 +480,9 @@ namespace EcoTrack.WebMvc.Migrations
                     b.Navigation("EmissionFactor");
                 });
 
-            modelBuilder.Entity("EcoTrack.WebMvc.Entities.ElectricityActivity", b =>
+            modelBuilder.Entity("EcoTrack.WebMvc.Models.ElectricityActivity", b =>
                 {
-                    b.HasOne("EcoTrack.WebMvc.Entities.EmissionFactor", "EmissionFactor")
+                    b.HasOne("EcoTrack.WebMvc.Models.EmissionFactor", "EmissionFactor")
                         .WithMany()
                         .HasForeignKey("EmissionFactorId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -470,9 +491,31 @@ namespace EcoTrack.WebMvc.Migrations
                     b.Navigation("EmissionFactor");
                 });
 
-            modelBuilder.Entity("EcoTrack.WebMvc.Entities.FoodActivity", b =>
+            modelBuilder.Entity("EcoTrack.WebMvc.Models.FoodActivity", b =>
                 {
-                    b.HasOne("EcoTrack.WebMvc.Entities.EmissionFactor", "EmissionFactor")
+                    b.HasOne("EcoTrack.WebMvc.Models.EmissionFactor", "EmissionFactor")
+                        .WithMany()
+                        .HasForeignKey("EmissionFactorId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("EmissionFactor");
+                });
+
+            modelBuilder.Entity("EcoTrack.WebMvc.Models.TravelActivity", b =>
+                {
+                    b.HasOne("EcoTrack.WebMvc.Models.EmissionFactor", "EmissionFactor")
+                        .WithMany()
+                        .HasForeignKey("EmissionFactorId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("EmissionFactor");
+                });
+
+            modelBuilder.Entity("EcoTrack.WebMvc.Models.WasteActivity", b =>
+                {
+                    b.HasOne("EcoTrack.WebMvc.Models.EmissionFactor", "EmissionFactor")
                         .WithMany()
                         .HasForeignKey("EmissionFactorId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -481,34 +524,12 @@ namespace EcoTrack.WebMvc.Migrations
                     b.Navigation("EmissionFactor");
                 });
 
-            modelBuilder.Entity("EcoTrack.WebMvc.Entities.TravelActivity", b =>
-                {
-                    b.HasOne("EcoTrack.WebMvc.Entities.EmissionFactor", "EmissionFactor")
-                        .WithMany()
-                        .HasForeignKey("EmissionFactorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("EmissionFactor");
-                });
-
-            modelBuilder.Entity("EcoTrack.WebMvc.Entities.WasteActivity", b =>
-                {
-                    b.HasOne("EcoTrack.WebMvc.Entities.EmissionFactor", "EmissionFactor")
-                        .WithMany()
-                        .HasForeignKey("EmissionFactorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("EmissionFactor");
-                });
-
-            modelBuilder.Entity("EcoTrack.WebMvc.Entities.Family", b =>
+            modelBuilder.Entity("EcoTrack.WebMvc.Models.Family", b =>
                 {
                     b.Navigation("Members");
                 });
 
-            modelBuilder.Entity("EcoTrack.WebMvc.Entities.User", b =>
+            modelBuilder.Entity("EcoTrack.WebMvc.Models.User", b =>
                 {
                     b.Navigation("Activities");
 

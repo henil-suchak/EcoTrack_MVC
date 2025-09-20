@@ -36,8 +36,8 @@ namespace EcoTrack.WebMvc.Controllers
                 {
                     // Use the service to perform the registration logic
                     var newUser = await _userService.RegisterUserAsync(
-                        viewModel.Name, 
-                        viewModel.Email, 
+                        viewModel.Name,
+                        viewModel.Email,
                         viewModel.Password);
 
                     // TODO: Log the user in automatically after registration.
@@ -52,9 +52,44 @@ namespace EcoTrack.WebMvc.Controllers
                     ModelState.AddModelError("Email", ex.Message);
                 }
             }
-            
+
             // If the model state is not valid, or if there was an error,
             // return the view with the data the user already entered.
+            return View(viewModel);
+        }
+        // In src/EcoTrack.WebMvc/Controllers/UsersController.cs
+
+        // --- LOGIN ---
+
+        // GET: /Users/Login
+        [HttpGet]
+        public IActionResult Login()
+        {
+            return View(new UserLoginViewModel());
+        }
+
+        // POST: /Users/Login
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Login(UserLoginViewModel viewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                // Use the service to validate the user
+                var user = await _userService.LoginAsync(viewModel.Email, viewModel.Password);
+
+                if (user != null)
+                {
+                    // TODO: Actually sign the user in using ASP.NET Core Identity or Cookies
+                    // This is a critical security step for later.
+
+                    return RedirectToAction("Index", "Home"); // Redirect to home on successful login
+                }
+
+                // If login fails, add an error message
+                ModelState.AddModelError("", "Invalid email or password.");
+            }
+
             return View(viewModel);
         }
     }

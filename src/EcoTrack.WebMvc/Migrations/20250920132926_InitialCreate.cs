@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace EcoTrack.WebMvc.Migrations
 {
     /// <inheritdoc />
@@ -15,8 +17,7 @@ namespace EcoTrack.WebMvc.Migrations
                 name: "EmissionFactors",
                 columns: table => new
                 {
-                    EmissionFactorId = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                    EmissionFactorId = table.Column<Guid>(type: "TEXT", nullable: false),
                     ActivityType = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
                     SubType = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
                     Region = table.Column<string>(type: "TEXT", maxLength: 100, nullable: true),
@@ -74,27 +75,26 @@ namespace EcoTrack.WebMvc.Migrations
                     ActivityType = table.Column<int>(type: "INTEGER", nullable: false),
                     CarbonEmission = table.Column<decimal>(type: "decimal(18, 6)", nullable: false),
                     UserId = table.Column<Guid>(type: "TEXT", nullable: false),
-                    Discriminator = table.Column<string>(type: "TEXT", maxLength: 21, nullable: false),
                     ApplianceType = table.Column<string>(type: "TEXT", maxLength: 100, nullable: true),
                     UsageTime = table.Column<decimal>(type: "decimal(18, 2)", nullable: true),
                     PowerRating = table.Column<decimal>(type: "decimal(18, 2)", nullable: true),
-                    EmissionFactorId = table.Column<int>(type: "INTEGER", nullable: true),
+                    EmissionFactorId = table.Column<Guid>(type: "TEXT", nullable: true),
                     Consumption = table.Column<decimal>(type: "decimal(18, 2)", nullable: true),
                     SourceType = table.Column<string>(type: "TEXT", maxLength: 50, nullable: true),
-                    ElectricityActivity_EmissionFactorId = table.Column<int>(type: "INTEGER", nullable: true),
+                    ElectricityActivity_EmissionFactorId = table.Column<Guid>(type: "TEXT", nullable: true),
                     FoodType = table.Column<string>(type: "TEXT", maxLength: 100, nullable: true),
                     Quantity = table.Column<decimal>(type: "decimal(18, 2)", nullable: true),
                     Source = table.Column<string>(type: "TEXT", maxLength: 100, nullable: true),
-                    FoodActivity_EmissionFactorId = table.Column<int>(type: "INTEGER", nullable: true),
+                    FoodActivity_EmissionFactorId = table.Column<Guid>(type: "TEXT", nullable: true),
                     Mode = table.Column<string>(type: "TEXT", maxLength: 100, nullable: true),
                     Distance = table.Column<decimal>(type: "decimal(18, 2)", nullable: true),
                     FuelType = table.Column<string>(type: "TEXT", maxLength: 50, nullable: true),
                     LocationStart = table.Column<string>(type: "TEXT", maxLength: 200, nullable: true),
                     LocationEnd = table.Column<string>(type: "TEXT", maxLength: 200, nullable: true),
-                    TravelActivity_EmissionFactorId = table.Column<int>(type: "INTEGER", nullable: true),
+                    TravelActivity_EmissionFactorId = table.Column<Guid>(type: "TEXT", nullable: true),
                     WasteType = table.Column<string>(type: "TEXT", maxLength: 100, nullable: true),
                     Amount = table.Column<decimal>(type: "decimal(18, 2)", nullable: true),
-                    WasteActivity_EmissionFactorId = table.Column<int>(type: "INTEGER", nullable: true)
+                    WasteActivity_EmissionFactorId = table.Column<Guid>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -116,13 +116,13 @@ namespace EcoTrack.WebMvc.Migrations
                         column: x => x.FoodActivity_EmissionFactorId,
                         principalTable: "EmissionFactors",
                         principalColumn: "EmissionFactorId",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Activities_EmissionFactors_TravelActivity_EmissionFactorId",
                         column: x => x.TravelActivity_EmissionFactorId,
                         principalTable: "EmissionFactors",
                         principalColumn: "EmissionFactorId",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Activities_EmissionFactors_WasteActivity_EmissionFactorId",
                         column: x => x.WasteActivity_EmissionFactorId,
@@ -204,6 +204,16 @@ namespace EcoTrack.WebMvc.Migrations
                         principalTable: "Users",
                         principalColumn: "UserId",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.InsertData(
+                table: "EmissionFactors",
+                columns: new[] { "EmissionFactorId", "ActivityType", "Region", "SourceReference", "SubType", "Value" },
+                values: new object[,]
+                {
+                    { new Guid("00000000-0000-0000-0000-000000000001"), "Travel", null, "Default", "Car", 0.21m },
+                    { new Guid("00000000-0000-0000-0000-000000000002"), "Food", null, "Default", "Beef", 27.0m },
+                    { new Guid("00000000-0000-0000-0000-000000000003"), "Food", null, "Default", "Chicken", 6.9m }
                 });
 
             migrationBuilder.CreateIndex(

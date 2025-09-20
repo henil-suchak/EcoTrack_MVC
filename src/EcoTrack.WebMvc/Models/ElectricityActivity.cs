@@ -14,7 +14,7 @@ namespace EcoTrack.WebMvc.Models
         public string SourceType { get; set; } = string.Empty; // "smart meter", "bill upload"
         
         // Foreign Key to the EmissionFactor entity
-        public int EmissionFactorId { get; set; }
+        public Guid EmissionFactorId { get; set; }
         
         // Navigation property
         public EmissionFactor? EmissionFactor { get; set; }

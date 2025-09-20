@@ -11,32 +11,47 @@
 <div class="row">
     <div class="col-md-6">
         <form asp-action="Log">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div asp-validation-summary="All" class="text-danger"></div>
 
             <div class="mb-3">
                 <label asp-for="ActivityType" class="form-label"></label>
-                <select asp-for="ActivityType" asp-items="Html.GetEnumSelectList<ActivityType>()" class="form-select">
-                    <option>Select Type...</option>
+                <select id="activityTypeSelector" asp-for="ActivityType" asp-items="Html.GetEnumSelectList<ActivityType>()" class="form-select">
+                    <option value="">-- Select an Activity Type --</option>
                 </select>
                 <span asp-validation-for="ActivityType" class="text-danger"></span>
             </div>
 
             <hr />
             
-            @* We will add sections for each activity type here later *@
-            @* For now, let's just show the Travel fields *@
-
-            <h4>Travel Details</h4>
-            <div class="mb-3">
-                <label asp-for="TravelMode" class="form-label"></label>
-                <input asp-for="TravelMode" class="form-control" />
+            <div id="travel-section" class="activity-details" style="display: none;">
+                <h4>Travel Details</h4>
+                <div class="mb-3">
+                    <label asp-for="TravelMode" class="form-label"></label>
+                    <input asp-for="TravelMode" class="form-control" />
+                    <span asp-validation-for="TravelMode" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="Distance" class="form-label"></label>
+                    <input asp-for="Distance" class="form-control" />
+                    <span asp-validation-for="Distance" class="text-danger"></span>
+                </div>
             </div>
-            <div class="mb-3">
-                <label asp-for="Distance" class="form-label"></label>
-                <input asp-for="Distance" class="form-control" />
+
+            <div id="food-section" class="activity-details" style="display: none;">
+                <h4>Food Details</h4>
+                <div class="mb-3">
+                    <label asp-for="FoodType" class="form-label"></label>
+                    <input asp-for="FoodType" class="form-control" />
+                    <span asp-validation-for="FoodType" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="Quantity" class="form-label"></label>
+                    <input asp-for="Quantity" class="form-control" />
+                    <span asp-validation-for="Quantity" class="text-danger"></span>
+                </div>
             </div>
             
-            <div class="mb-3">
+            <div class="mb-3 mt-4">
                 <button type="submit" class="btn btn-primary">Log Activity</button>
             </div>
         </form>
@@ -45,4 +60,36 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script>
+        // This script runs when the page is loaded
+        document.addEventListener('DOMContentLoaded', function () {
+            const selector = document.getElementById('activityTypeSelector');
+            const travelSection = document.getElementById('travel-section');
+            const foodSection = document.getElementById('food-section');
+
+            function toggleSections() {
+                // Get the integer value of the selected option
+                const selectedValue = parseInt(selector.value, 10);
+                
+                // Hide all detail sections by default
+                travelSection.style.display = 'none';
+                foodSection.style.display = 'none';
+
+                // Show the correct section based on the enum value
+                // ActivityType.Travel is 0, ActivityType.Food is 1, etc.
+                if (selectedValue === @((int)ActivityType.Travel)) {
+                    travelSection.style.display = 'block';
+                } else if (selectedValue === @((int)ActivityType.Food)) {
+                    foodSection.style.display = 'block';
+                }
+            }
+
+            // Call the function when the dropdown selection changes
+            selector.addEventListener('change', toggleSections);
+
+            // Call the function on page load in case a value is already selected
+            toggleSections();
+        });
+    </script>
 }
