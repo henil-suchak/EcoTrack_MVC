@@ -1,0 +1,48 @@
+@model EcoTrack.WebMvc.ViewModels.LogActivityViewModel
+@using EcoTrack.WebMvc.Enums
+
+@{
+    ViewData["Title"] = "Log New Activity";
+}
+
+<h1>Log New Activity</h1>
+<hr />
+
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="Log">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="mb-3">
+                <label asp-for="ActivityType" class="form-label"></label>
+                <select asp-for="ActivityType" asp-items="Html.GetEnumSelectList<ActivityType>()" class="form-select">
+                    <option>Select Type...</option>
+                </select>
+                <span asp-validation-for="ActivityType" class="text-danger"></span>
+            </div>
+
+            <hr />
+            
+            @* We will add sections for each activity type here later *@
+            @* For now, let's just show the Travel fields *@
+
+            <h4>Travel Details</h4>
+            <div class="mb-3">
+                <label asp-for="TravelMode" class="form-label"></label>
+                <input asp-for="TravelMode" class="form-control" />
+            </div>
+            <div class="mb-3">
+                <label asp-for="Distance" class="form-label"></label>
+                <input asp-for="Distance" class="form-control" />
+            </div>
+            
+            <div class="mb-3">
+                <button type="submit" class="btn btn-primary">Log Activity</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
