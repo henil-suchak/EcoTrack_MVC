@@ -1,7 +1,11 @@
 using Microsoft.AspNetCore.Mvc;
 using EcoTrack.WebMvc.Interfaces; // For IUserService
 using EcoTrack.WebMvc.ViewModels; // For the ViewModels
-
+using EcoTrack.WebMvc.Models;
+using System.Security.Claims;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 namespace EcoTrack.WebMvc.Controllers
 {
     public class UsersController : Controller
@@ -41,7 +45,7 @@ namespace EcoTrack.WebMvc.Controllers
                         viewModel.Password);
 
                     // TODO: Log the user in automatically after registration.
-
+                    await SignInUserAsync(newUser);
                     // Redirect to the home page after successful registration
                     return RedirectToAction("Index", "Home");
                 }
@@ -82,6 +86,7 @@ namespace EcoTrack.WebMvc.Controllers
                 {
                     // TODO: Actually sign the user in using ASP.NET Core Identity or Cookies
                     // This is a critical security step for later.
+                    await SignInUserAsync(user, viewModel.RememberMe);
 
                     return RedirectToAction("Index", "Home"); // Redirect to home on successful login
                 }
@@ -91,6 +96,34 @@ namespace EcoTrack.WebMvc.Controllers
             }
 
             return View(viewModel);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Logout()
+        {
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            return RedirectToAction("Index", "Home");
+        }
+         private async Task SignInUserAsync(User user, bool isPersistent = false)
+        {
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.NameIdentifier, user.UserId.ToString()),
+                new Claim(ClaimTypes.Name, user.Name),
+                new Claim(ClaimTypes.Email, user.Email),
+            };
+
+            var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+
+            var authProperties = new AuthenticationProperties
+            {
+                IsPersistent = isPersistent
+            };
+
+            await HttpContext.SignInAsync(
+                CookieAuthenticationDefaults.AuthenticationScheme,
+                new ClaimsPrincipal(claimsIdentity),
+                authProperties);
         }
     }
 }

@@ -6,9 +6,12 @@ using EcoTrack.WebMvc.Models;
 using EcoTrack.WebMvc.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using EcoTrack.WebMvc.Enums;
+using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace EcoTrack.WebMvc.Controllers
-{
+{   
+     [Authorize]
     public class ActivitiesController : Controller
     {
         private readonly IActivityService _activityService;
@@ -50,15 +53,17 @@ namespace EcoTrack.WebMvc.Controllers
                 switch (viewModel.ActivityType)
                 {
                     case ActivityType.Travel:
-                        newActivity = new TravelActivity { 
-                            Mode = viewModel.TravelMode!, 
-                            Distance = viewModel.Distance 
+                        newActivity = new TravelActivity
+                        {
+                            Mode = viewModel.TravelMode!,
+                            Distance = viewModel.Distance
                         };
                         break;
                     case ActivityType.Food:
-                        newActivity = new FoodActivity {
-                             FoodType = viewModel.FoodType!,
-                             Quantity = viewModel.Quantity
+                        newActivity = new FoodActivity
+                        {
+                            FoodType = viewModel.FoodType!,
+                            Quantity = viewModel.Quantity
                         };
                         break;
                     default:
@@ -67,13 +72,18 @@ namespace EcoTrack.WebMvc.Controllers
                 }
 
                 newActivity.ActivityType = viewModel.ActivityType;
-                
+                var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                if (string.IsNullOrEmpty(userIdString))
+                {
+                    // This should not happen if [Authorize] is used, but it's a good safeguard
+                    return Unauthorized();
+                }
                 // IMPORTANT: Make sure this is a REAL UserId that exists in your Users table.
                 // Go to your database, copy the Guid for a user you created, and paste it here.
-                newActivity.UserId = Guid.Parse("C81E6A10-67E3-4228-BB74-D2668A54E8C0");
-                
+                // newActivity.UserId = Guid.Parse("C81E6A10-67E3-4228-BB74-D2668A54E8C0");
+                 newActivity.UserId = Guid.Parse(userIdString);
                 await _activityService.LogActivityAsync(newActivity);
-                
+
                 return RedirectToAction("Index", "Home");
             }
             catch (Exception ex)

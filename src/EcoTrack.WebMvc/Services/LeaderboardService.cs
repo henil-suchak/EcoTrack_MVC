@@ -17,12 +17,12 @@ namespace EcoTrack.WebMvc.Services
             _unitOfWork = unitOfWork;
         }
 
-        
+
         public async Task<IEnumerable<LeaderboardViewModel>> GetLeaderboardAsync(string period, int count)
         {
             var entries = await _unitOfWork.LeaderboardEntryRepository.GetTopEntriesAsync(period, count);
 
-           
+
             return entries.Select(e => new LeaderboardViewModel
             {
                 Rank = e.Rank,
@@ -48,7 +48,7 @@ namespace EcoTrack.WebMvc.Services
                 throw new ArgumentException("Invalid period specified. Use 'Weekly' or 'Monthly'.");
             }
 
-           
+
             var recentActivities = await _unitOfWork.ActivityRepository.GetActivitiesSince(startDate);
 
             var userEmissions = recentActivities
@@ -82,5 +82,9 @@ namespace EcoTrack.WebMvc.Services
 
             await _unitOfWork.CompleteAsync();
         }
+        public async Task<LeaderboardEntry?> GetUserRankAsync(Guid userId, string period)
+    {
+        return await _unitOfWork.LeaderboardEntryRepository.GetEntryByUserAsync(userId, period);
+    }
     }
 }

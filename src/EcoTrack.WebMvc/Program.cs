@@ -4,6 +4,7 @@ using EcoTrack.WebMvc.Data;
 using EcoTrack.WebMvc.Interfaces;
 using EcoTrack.WebMvc.Repositories;
 using EcoTrack.WebMvc.Services;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,7 +27,13 @@ builder.Services.AddScoped<ILeaderboardEntryRepository, LeaderboardEntryReposito
 builder.Services.AddScoped<IFamilyRepository, FamilyRepository>();
 builder.Services.AddScoped<IEmissionFactorRepository, EmissionFactorRepository>();
 
-
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/Users/Login"; // Redirect here if a user is not logged in
+        options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
+        options.SlidingExpiration = true;
+    });
 // 4. Register the Unit of Work.
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
@@ -55,6 +62,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(
