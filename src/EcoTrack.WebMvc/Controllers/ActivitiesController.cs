@@ -15,11 +15,13 @@ namespace EcoTrack.WebMvc.Controllers
     public class ActivitiesController : Controller
     {
         private readonly IActivityService _activityService;
+         private readonly ISuggestionService _suggestionService;
         private readonly IMapper _mapper;
 
-        public ActivitiesController(IActivityService activityService, IMapper mapper)
+        public ActivitiesController(IActivityService activityService, ISuggestionService suggestionService, IMapper mapper)
         {
             _activityService = activityService;
+            _suggestionService = suggestionService;
             _mapper = mapper;
         }
 
@@ -83,7 +85,7 @@ namespace EcoTrack.WebMvc.Controllers
                 // newActivity.UserId = Guid.Parse("C81E6A10-67E3-4228-BB74-D2668A54E8C0");
                  newActivity.UserId = Guid.Parse(userIdString);
                 await _activityService.LogActivityAsync(newActivity);
-
+                 await _suggestionService.GenerateSuggestionsForUserAsync(newActivity.UserId);
                 return RedirectToAction("Index", "Home");
             }
             catch (Exception ex)

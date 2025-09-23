@@ -1,0 +1,40 @@
+@using EcoTrack.WebMvc.ViewModels
+@model IEnumerable<SuggestionViewModel>
+
+@{
+    ViewData["Title"] = "My Suggestions";
+}
+
+<h1 class="mb-4">@ViewData["Title"]</h1>
+
+@if (Model.Any())
+{
+    <div class="row">
+        @foreach (var suggestion in Model)
+        {
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title">@suggestion.Category Tip</h5>
+                        <p class="card-text flex-grow-1">@suggestion.Description</p>
+                        
+                        <form asp-action="MarkAsRead" method="post" class="mt-auto">
+                            <input type="hidden" name="suggestionId" value="@suggestion.SuggestionId" />
+                            <button type="submit" class="btn btn-sm btn-outline-secondary">Mark as Read</button>
+                        </form>
+                    </div>
+                    <div class="card-footer text-muted">
+                        Received: @suggestion.DateIssuedDisplay
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+else
+{
+    <div class="text-center">
+        <h4>You're all caught up!</h4>
+        <p>You have no new suggestions. Keep logging your activities to get more personalized tips.</p>
+    </div>
+}

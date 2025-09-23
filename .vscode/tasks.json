@@ -1,0 +1,17 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "EcoTrack.WebMvc",
+      "type": "process",
+      "command": "dotnet",
+      "args": [
+        "build",
+        "${workspaceFolder}/src/EcoTrack.WebMvc/EcoTrack.WebMvc.csproj",
+        "/property:GenerateFullPaths=true",
+        "/consoleloggerparameters:NoSummary;ForceNoAlign;"
+      ],
+      "problemMatcher": "$msCompile"
+    }
+  ]
+}

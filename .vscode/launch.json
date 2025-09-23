@@ -1,0 +1,63 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "coreclr",
+      "request": "launch",
+      "cwd": "${workspaceFolder}/src/EcoTrack.WebMvc",
+      "program": "${workspaceFolder}/src/EcoTrack.WebMvc/bin/Debug/net9.0/EcoTrack.WebMvc.dll",
+      "stopAtEntry": false,
+      "env": {
+        "DOTNET_CLI_UI_LANGUAGE": "en-US",
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "logging": {
+        "moduleLoad": false
+      },
+      "sourceFileMap": {
+        "/Views": "${workspaceFolder}/Views"
+      },
+      "name": "EcoTrack.WebMvc [http]",
+      "preLaunchTask": "EcoTrack.WebMvc",
+      "args": [],
+      "serverReadyAction": {
+        "action": "openExternally",
+        "pattern": "\\bNow listening on:\\s+https?://\\S",
+        "uriFormat": "http://localhost:5192"
+      }
+    },
+    {
+      "type": "coreclr",
+      "request": "launch",
+      "cwd": "${workspaceFolder}/src/EcoTrack.WebMvc",
+      "program": "${workspaceFolder}/src/EcoTrack.WebMvc/bin/Debug/net9.0/EcoTrack.WebMvc.dll",
+      "stopAtEntry": false,
+      "env": {
+        "DOTNET_CLI_UI_LANGUAGE": "en-US",
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "logging": {
+        "moduleLoad": false
+      },
+      "sourceFileMap": {
+        "/Views": "${workspaceFolder}/Views"
+      },
+      "name": "EcoTrack.WebMvc [https]",
+      "preLaunchTask": "EcoTrack.WebMvc",
+      "args": [],
+      "serverReadyAction": {
+        "action": "openExternally",
+        "pattern": "\\bNow listening on:\\s+https?://\\S",
+        "uriFormat": "https://localhost:7023"
+      }
+    },
+    {
+      "name": "Attach to a .NET Process",
+      "type": "coreclr",
+      "request": "attach",
+      "logging": {
+        "moduleLoad": false
+      }
+    }
+  ]
+}
