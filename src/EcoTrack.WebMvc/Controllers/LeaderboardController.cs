@@ -13,6 +13,7 @@ namespace EcoTrack.WebMvc.Controllers
         }
         public async Task<IActionResult> Index()
         {
+             await _leaderboardService.UpdateLeaderboardAsync("Weekly");
             var weeklyLeaderboard = await _leaderboardService.GetLeaderboardAsync("Weekly", 10);
             // var monthlyLeaderboard=await _leaderboardService.GetLeaderboardAsync("Monthly",10);
             ViewBag.CurrentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);

@@ -10,5 +10,6 @@ namespace EcoTrack.WebMvc.Interfaces
         /// </summary>
         /// <param name="userId">The ID of the user to check.</param>
         Task CheckAndAwardBadgesAsync(Guid userId);
+        //   Task<IEnumerable<Badge>> GetUserBadgesAsync(Guid userId);
     }
 }
