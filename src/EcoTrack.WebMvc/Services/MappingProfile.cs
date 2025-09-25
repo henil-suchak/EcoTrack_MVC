@@ -8,14 +8,11 @@ namespace EcoTrack.WebMvc.Services
     {
         public MappingProfile()
         {
-            // Base mapping from the domain model to the base ViewModel
+            // Base mapping from the domain model to the base ViewModel.
+            // .IncludeAllDerived() automatically finds and applies the specific mappings below.
             CreateMap<Activity, ActivityViewModel>()
                 .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.User != null ? src.User.Name : "Unknown"))
-                .Include<TravelActivity, TravelActivityViewModel>()
-                .Include<FoodActivity, FoodActivityViewModel>()
-                .Include<ElectricityActivity, ElectricityActivityViewModel>()
-                .Include<ApplianceActivity, ApplianceActivityViewModel>()
-                .Include<WasteActivity, WasteActivityViewModel>();
+                .IncludeAllDerived();
 
             // Specific mappings for each derived type
             CreateMap<TravelActivity, TravelActivityViewModel>();
@@ -23,6 +20,9 @@ namespace EcoTrack.WebMvc.Services
             CreateMap<ElectricityActivity, ElectricityActivityViewModel>();
             CreateMap<ApplianceActivity, ApplianceActivityViewModel>();
             CreateMap<WasteActivity, WasteActivityViewModel>();
+
+            // --- You will add other mappings here, like for Suggestions ---
+            CreateMap<Suggestion, SuggestionViewModel>(); // Example from previous discussion
         }
     }
 }

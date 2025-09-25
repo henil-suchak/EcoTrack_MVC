@@ -8,6 +8,8 @@ namespace EcoTrack.WebMvc.Interfaces
         Task GenerateSuggestionsForUserAsync(Guid userId);
 
         Task<IEnumerable<Suggestion>> GetUnreadSuggestionsAsync(Guid userId);
-         Task MarkSuggestionAsReadAsync(Guid suggestionId);
+        Task MarkSuggestionAsReadAsync(Guid suggestionId);
+
+        Task<IEnumerable<Suggestion>> GetAllSuggestionsAsync(Guid userId);
     }
 }

@@ -7,6 +7,7 @@ using EcoTrack.WebMvc.Interfaces;
 using EcoTrack.WebMvc.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using EcoTrack.WebMvc.Models; // Add this if missing
 
 namespace EcoTrack.WebMvc.Controllers
 {
@@ -22,8 +23,8 @@ namespace EcoTrack.WebMvc.Controllers
             _mapper = mapper;
         }
 
-        // GET: /Suggestions
-        public async Task<IActionResult> Index()
+        // UPDATED: The Index action now accepts a boolean parameter
+        public async Task<IActionResult> Index(bool showAll = false)
         {
             var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (!Guid.TryParse(userIdString, out var userId))
@@ -31,16 +32,28 @@ namespace EcoTrack.WebMvc.Controllers
                 return Unauthorized();
             }
 
-            // 1. Get the raw suggestion models from the service
-            var suggestions = await _suggestionService.GetUnreadSuggestionsAsync(userId);
+            IEnumerable<Suggestion> suggestions;
+            if (showAll)
+            {
+                // If showAll is true, get all suggestions
+                suggestions = await _suggestionService.GetAllSuggestionsAsync(userId);
+                ViewBag.Title = "All Suggestions";
+                ViewBag.ShowAll = true;
+            }
+            else
+            {
+                // Otherwise, just get the unread ones
+                suggestions = await _suggestionService.GetUnreadSuggestionsAsync(userId);
+                ViewBag.Title = "New Suggestions";
+                ViewBag.ShowAll = false;
+            }
             
-            // 2. Map them to the ViewModel for display
             var viewModel = _mapper.Map<IEnumerable<SuggestionViewModel>>(suggestions);
 
             return View(viewModel);
         }
 
-        // POST: /Suggestions/MarkAsRead/some-guid
+        // MarkAsRead method remains the same
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> MarkAsRead(Guid suggestionId)
@@ -50,7 +63,6 @@ namespace EcoTrack.WebMvc.Controllers
                 await _suggestionService.MarkSuggestionAsReadAsync(suggestionId);
             }
             
-            // Redirect back to the suggestions list
             return RedirectToAction(nameof(Index));
         }
     }

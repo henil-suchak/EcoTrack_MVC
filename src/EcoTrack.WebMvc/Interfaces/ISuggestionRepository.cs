@@ -9,5 +9,6 @@ namespace EcoTrack.WebMvc.Interfaces
     {
         // Custom method to get all unread suggestions for a specific user.
         Task<IEnumerable<Suggestion>> GetUnreadSuggestionsByUserIdAsync(Guid userId);
+        Task<IEnumerable<Suggestion>> GetAllByUserIdAsync(Guid userId);
     }
 }

@@ -23,5 +23,12 @@ namespace EcoTrack.WebMvc.Repositories
                 .Where(s => s.UserId == userId && s.IsRead == false)
                 .ToListAsync();
         }
+        public async Task<IEnumerable<Suggestion>> GetAllByUserIdAsync(Guid userId)
+        {
+            return await _context.Suggestions
+                .Where(s => s.UserId == userId)
+                .OrderByDescending(s => s.DateTimeIssued)
+                .ToListAsync();
+        }
     }
 }
