@@ -43,7 +43,7 @@ builder.Services.AddScoped<IActivityService, ActivityService>();
 builder.Services.AddScoped<ISuggestionService, SuggestionService>();
 builder.Services.AddScoped<ILeaderboardService, LeaderboardService>();
 builder.Services.AddScoped<IBadgeService, BadgeService>(); 
-
+builder.Services.AddScoped<IDashboardService, DashboardService>();
 builder.Services.AddHostedService<LeaderboardUpdateService>();
 // 6. Register AutoMapper.
 builder.Services.AddAutoMapper(typeof(MappingProfile));

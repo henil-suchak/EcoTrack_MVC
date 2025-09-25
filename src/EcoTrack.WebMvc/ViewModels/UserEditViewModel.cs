@@ -5,6 +5,7 @@ namespace EcoTrack.WebMvc.ViewModels
 {
     public class UserEditViewModel
     {
+        // Hidden field in the form to identify the user
         public Guid UserId { get; set; }
 
         [Required]
@@ -19,7 +20,7 @@ namespace EcoTrack.WebMvc.ViewModels
         [StringLength(150)]
         public string Location { get; set; } = string.Empty;
         
-        [Display(Name = "Lifestyle Preferences (e.g., Vegetarian, Commuter)")]
+        [Display(Name = "Lifestyle Preferences")]
         public string? LifestylePreferences { get; set; }
     }
 }

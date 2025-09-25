@@ -20,5 +20,11 @@ namespace EcoTrack.WebMvc.Repositories
             // FirstOrDefaultAsync will return the matching user or null if no user is found.
             return await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
         }
+        public async Task<User?> GetUserWithActivitiesAsync(Guid userId)
+        {
+            return await _context.Users
+                .Include(u => u.Activities) // Eagerly load the Activities collection
+                .FirstOrDefaultAsync(u => u.UserId == userId);
+        }
     }
 }

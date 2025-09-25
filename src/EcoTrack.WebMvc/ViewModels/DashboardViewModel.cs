@@ -11,5 +11,7 @@ namespace EcoTrack.WebMvc.ViewModels
         public IEnumerable<BadgeViewModel> EarnedBadges { get; set; } = new List<BadgeViewModel>();
         public LeaderboardEntry? WeeklyRankInfo { get; set; }
         public LeaderboardEntry? MonthlyRankInfo { get; set; }
+
+        public decimal TotalCarbonEmitted { get; set; }
     }
 }

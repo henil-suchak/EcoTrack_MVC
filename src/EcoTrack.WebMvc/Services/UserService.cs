@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using EcoTrack.WebMvc.Interfaces;
 using EcoTrack.WebMvc.Models;
 using BCrypt.Net;
+using EcoTrack.WebMvc.ViewModels;
 namespace EcoTrack.WebMvc.Services
 {
     public class UserService : IUserService
@@ -61,7 +62,7 @@ namespace EcoTrack.WebMvc.Services
             // e.g., bool isPasswordCorrect = BCrypt.Net.BCrypt.Verify(password, user.PasswordHash);
 
             // This is our temporary placeholder logic for now:
-            var hashedPassword = BCrypt.Net.BCrypt.Verify(password,user.PasswordHash);
+            var hashedPassword = BCrypt.Net.BCrypt.Verify(password, user.PasswordHash);
             if (!hashedPassword)
             {
                 return null; // Password does not match
@@ -69,6 +70,23 @@ namespace EcoTrack.WebMvc.Services
 
             // 3. If password is correct, return the user object
             return user;
+        }
+        // In your UserService class, add this new method:
+        public async Task UpdateUserAsync(UserEditViewModel viewModel)
+        {
+            var user = await _unitOfWork.UserRepository.GetByIdAsync(viewModel.UserId);
+
+            if (user != null)
+            {
+                // Update the properties from the ViewModel
+                user.Name = viewModel.Name;
+                user.Age = viewModel.Age;
+                user.Location = viewModel.Location;
+                user.LifestylePreferences = viewModel.LifestylePreferences;
+
+                _unitOfWork.UserRepository.Update(user);
+                await _unitOfWork.CompleteAsync();
+            }
         }
     }
 }

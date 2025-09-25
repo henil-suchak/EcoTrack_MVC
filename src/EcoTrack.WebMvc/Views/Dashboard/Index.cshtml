@@ -1,26 +1,53 @@
-@model IEnumerable<EcoTrack.WebMvc.ViewModels.ActivityViewModel>
+@model EcoTrack.WebMvc.ViewModels.DashboardViewModel
 
-<!-- ... other HTML ... -->
+@{
+    ViewData["Title"] = "My Dashboard";
+}
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>Date</th>
-            <th>Description</th>
-            <th>Carbon Emission (kg CO₂)</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var activity in Model)
+<div class="row mb-4">
+    <div class="col-md-8">
+        <h1>Welcome, @Model.UserProfile.Name!</h1>
+        <p class="lead">Here's a summary of your carbon footprint.</p>
+    </div>
+    <div class="col-md-4 text-md-end">
+        <a asp-action="Edit" asp-controller="Users" asp-route-id="@Model.UserProfile.UserId" class="btn btn-primary mt-2">Edit Profile</a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <h3>Recent Activities</h3>
+        @if (Model.RecentActivities.Any())
         {
-            <tr>
-                <td>@activity.DateTime.ToShortDateString()</td>
-                @* CORRECTED: Changed from .Description to .GetDescription() *@
-                <td>@activity.GetDescription()</td>
-                <td>@activity.CarbonEmission.ToString("F2")</td>
-            </tr>
+            <ul class="list-group">
+                @foreach (var activity in Model.RecentActivities.Take(5))
+                {
+                    <li class="list-group-item">
+                        @activity.GetDescription()
+                        <span class="badge bg-secondary float-end">@activity.CarbonEmission.ToString("F2") kg CO₂</span>
+                    </li>
+                }
+            </ul>
         }
-    </tbody>
-</table>
-
-<!-- ... other HTML ... -->
+        else
+        {
+            <p>No activities logged yet.</p>
+        }
+    </div>
+    <div class="col-md-6">
+        <h3>New Suggestions</h3>
+        @if (Model.UnreadSuggestions.Any())
+        {
+            <ul class="list-group">
+                @foreach (var suggestion in Model.UnreadSuggestions)
+                {
+                    <li class="list-group-item">@suggestion.Description</li>
+                }
+            </ul>
+        }
+        else
+        {
+            <p>No new suggestions.</p>
+        }
+    </div>
+</div>
