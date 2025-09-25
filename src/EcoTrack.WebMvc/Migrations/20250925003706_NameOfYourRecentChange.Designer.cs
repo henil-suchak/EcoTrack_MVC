@@ -3,6 +3,7 @@ using System;
 using EcoTrack.WebMvc.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EcoTrack.WebMvc.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250925003706_NameOfYourRecentChange")]
+    partial class NameOfYourRecentChange
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.9");
@@ -116,96 +119,6 @@ namespace EcoTrack.WebMvc.Migrations
                     b.HasKey("EmissionFactorId");
 
                     b.ToTable("EmissionFactors");
-
-                    b.HasData(
-                        new
-                        {
-                            EmissionFactorId = new Guid("0a0a0a0a-0000-0000-0000-000000000001"),
-                            ActivityType = "Travel",
-                            SourceReference = "Default",
-                            SubType = "Car",
-                            Value = 0.21m
-                        },
-                        new
-                        {
-                            EmissionFactorId = new Guid("0a0a0a0a-0000-0000-0000-000000000002"),
-                            ActivityType = "Travel",
-                            SourceReference = "Default",
-                            SubType = "Bus",
-                            Value = 0.10m
-                        },
-                        new
-                        {
-                            EmissionFactorId = new Guid("0a0a0a0a-0000-0000-0000-000000000003"),
-                            ActivityType = "Travel",
-                            SourceReference = "Default",
-                            SubType = "Train",
-                            Value = 0.04m
-                        },
-                        new
-                        {
-                            EmissionFactorId = new Guid("0b0b0b0b-0000-0000-0000-000000000001"),
-                            ActivityType = "Food",
-                            SourceReference = "Default",
-                            SubType = "Beef",
-                            Value = 27.0m
-                        },
-                        new
-                        {
-                            EmissionFactorId = new Guid("0b0b0b0b-0000-0000-0000-000000000002"),
-                            ActivityType = "Food",
-                            SourceReference = "Default",
-                            SubType = "Chicken",
-                            Value = 6.9m
-                        },
-                        new
-                        {
-                            EmissionFactorId = new Guid("0b0b0b0b-0000-0000-0000-000000000003"),
-                            ActivityType = "Food",
-                            SourceReference = "Default",
-                            SubType = "Vegetables",
-                            Value = 2.0m
-                        },
-                        new
-                        {
-                            EmissionFactorId = new Guid("0c0c0c0c-0000-0000-0000-000000000001"),
-                            ActivityType = "Electricity",
-                            SourceReference = "Default",
-                            SubType = "Grid",
-                            Value = 0.45m
-                        },
-                        new
-                        {
-                            EmissionFactorId = new Guid("0d0d0d0d-0000-0000-0000-000000000001"),
-                            ActivityType = "Appliance",
-                            SourceReference = "Default",
-                            SubType = "Fridge",
-                            Value = 0.45m
-                        },
-                        new
-                        {
-                            EmissionFactorId = new Guid("0d0d0d0d-0000-0000-0000-000000000002"),
-                            ActivityType = "Appliance",
-                            SourceReference = "Default",
-                            SubType = "AC",
-                            Value = 0.45m
-                        },
-                        new
-                        {
-                            EmissionFactorId = new Guid("0e0e0e0e-0000-0000-0000-000000000001"),
-                            ActivityType = "Waste",
-                            SourceReference = "Default",
-                            SubType = "Landfill",
-                            Value = 0.60m
-                        },
-                        new
-                        {
-                            EmissionFactorId = new Guid("0e0e0e0e-0000-0000-0000-000000000002"),
-                            ActivityType = "Waste",
-                            SourceReference = "Default",
-                            SubType = "Recyclable",
-                            Value = 0.10m
-                        });
                 });
 
             modelBuilder.Entity("EcoTrack.WebMvc.Models.Family", b =>
@@ -538,7 +451,7 @@ namespace EcoTrack.WebMvc.Migrations
                     b.HasOne("EcoTrack.WebMvc.Models.EmissionFactor", "EmissionFactor")
                         .WithMany()
                         .HasForeignKey("EmissionFactorId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("EmissionFactor");
@@ -549,7 +462,7 @@ namespace EcoTrack.WebMvc.Migrations
                     b.HasOne("EcoTrack.WebMvc.Models.EmissionFactor", "EmissionFactor")
                         .WithMany()
                         .HasForeignKey("EmissionFactorId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("EmissionFactor");
@@ -582,7 +495,7 @@ namespace EcoTrack.WebMvc.Migrations
                     b.HasOne("EcoTrack.WebMvc.Models.EmissionFactor", "EmissionFactor")
                         .WithMany()
                         .HasForeignKey("EmissionFactorId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("EmissionFactor");

@@ -1,5 +1,7 @@
 using System;
 using System.Threading.Tasks;
+using EcoTrack.WebMvc.DTO;
+using EcoTrack.WebMvc.Enums;
 using EcoTrack.WebMvc.Interfaces;
 using EcoTrack.WebMvc.Models;
 
@@ -14,55 +16,68 @@ namespace EcoTrack.WebMvc.Services
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<Activity> LogActivityAsync(Activity activity)
+        public async Task<Activity> LogActivityAsync(LogActivityDto dto)
         {
-            if (activity == null)
+            if (dto == null)
             {
-                throw new ArgumentNullException(nameof(activity));
+                throw new ArgumentNullException(nameof(dto));
             }
 
-            string subType = GetSubTypeForActivity(activity);
+            // Create the specific activity object based on the DTO
+            Activity newActivity;
+            switch (dto.ActivityType)
+            {
+                case ActivityType.Travel:
+                    newActivity = new TravelActivity { Mode = dto.TravelMode!, Distance = dto.Distance };
+                    break;
+                case ActivityType.Food:
+                    newActivity = new FoodActivity { FoodType = dto.FoodType!, Quantity = dto.Quantity };
+                    break;
+                case ActivityType.Electricity:
+                    newActivity = new ElectricityActivity { Consumption = dto.ElectricityConsumption, SourceType = "Bill" };
+                    break;
+                case ActivityType.Appliance:
+                    newActivity = new ApplianceActivity { ApplianceType = dto.ApplianceType!, UsageTime = dto.UsageTime, PowerRating = dto.PowerRating };
+                    break;
+                case ActivityType.Waste:
+                    newActivity = new WasteActivity { WasteType = dto.WasteType!, Amount = dto.Amount };
+                    break;
+                default:
+                    throw new NotSupportedException("Selected activity type is not supported yet.");
+            }
+
+            newActivity.UserId = dto.UserId;
+            newActivity.ActivityType = dto.ActivityType;
+            
+            string subType = GetSubTypeForActivity(newActivity);
             var factor = await _unitOfWork.EmissionFactorRepository.GetFactorAsync(
-                activity.ActivityType.ToString(), 
+                newActivity.ActivityType.ToString(), 
                 subType);
 
             if (factor == null)
             {
-                throw new InvalidOperationException($"Could not find a valid emission factor for {activity.ActivityType} with subtype {subType}.");
+                throw new InvalidOperationException($"Could not find a valid emission factor for {newActivity.ActivityType} with subtype {subType}.");
             }
-            
-            // --- THIS IS THE FIX ---
-            // Before calculating, assign the found factor's ID to the activity's foreign key.
-            // We use a switch to access the property on the correct derived type.
-            switch (activity)
+
+            // Use a switch statement to safely assign the EmissionFactorId
+            switch (newActivity)
             {
-                case TravelActivity ta:
-                    ta.EmissionFactorId = factor.EmissionFactorId;
-                    break;
-                case FoodActivity fa:
-                    fa.EmissionFactorId = factor.EmissionFactorId;
-                    break;
-                case ElectricityActivity ea:
-                    ea.EmissionFactorId = factor.EmissionFactorId;
-                    break;
-                case ApplianceActivity aa:
-                    aa.EmissionFactorId = factor.EmissionFactorId;
-                    break;
-                case WasteActivity wa:
-                    wa.EmissionFactorId = factor.EmissionFactorId;
-                    break;
+                case TravelActivity ta: ta.EmissionFactorId = factor.EmissionFactorId; break;
+                case FoodActivity fa: fa.EmissionFactorId = factor.EmissionFactorId; break;
+                case ElectricityActivity ea: ea.EmissionFactorId = factor.EmissionFactorId; break;
+                case ApplianceActivity aa: aa.EmissionFactorId = factor.EmissionFactorId; break;
+                case WasteActivity wa: wa.EmissionFactorId = factor.EmissionFactorId; break;
             }
 
-            activity.CarbonEmission = CalculateEmission(activity, factor.Value);
-            activity.DateTime = DateTime.UtcNow;
+            newActivity.CarbonEmission = CalculateEmission(newActivity, factor.Value);
+            newActivity.DateTime = DateTime.UtcNow;
 
-            await _unitOfWork.ActivityRepository.AddAsync(activity);
+            await _unitOfWork.ActivityRepository.AddAsync(newActivity);
             await _unitOfWork.CompleteAsync();
-
-            return activity;
+            
+            return newActivity;
         }
 
-        // ... GetSubTypeForActivity and CalculateEmission methods are the same ...
         private string GetSubTypeForActivity(Activity activity)
         {
             return activity switch

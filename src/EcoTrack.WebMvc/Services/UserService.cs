@@ -2,7 +2,7 @@ using System;
 using System.Threading.Tasks;
 using EcoTrack.WebMvc.Interfaces;
 using EcoTrack.WebMvc.Models;
-
+using BCrypt.Net;
 namespace EcoTrack.WebMvc.Services
 {
     public class UserService : IUserService
@@ -26,7 +26,7 @@ namespace EcoTrack.WebMvc.Services
             // 2. Business Rule: Hash the password (CRITICAL FOR SECURITY)
             // NEVER store plain-text passwords. This is a placeholder.
             // In a real app, you would use a library like BCrypt.Net here.
-            var hashedPassword = $"HASHED_{password}"; // TODO: Replace with real hashing logic
+            var hashedPassword = BCrypt.Net.BCrypt.HashPassword(password); // TODO: Replace with real hashing logic
 
             // 3. Create the new User entity
             var newUser = new User
@@ -61,8 +61,8 @@ namespace EcoTrack.WebMvc.Services
             // e.g., bool isPasswordCorrect = BCrypt.Net.BCrypt.Verify(password, user.PasswordHash);
 
             // This is our temporary placeholder logic for now:
-            var hashedPassword = $"HASHED_{password}";
-            if (user.PasswordHash != hashedPassword)
+            var hashedPassword = BCrypt.Net.BCrypt.Verify(password,user.PasswordHash);
+            if (!hashedPassword)
             {
                 return null; // Password does not match
             }
