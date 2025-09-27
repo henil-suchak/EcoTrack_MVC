@@ -1,0 +1,36 @@
+@using EcoTrack.WebMvc.ViewModels
+@model IEnumerable<BadgeViewModel>
+
+@{
+    ViewData["Title"] = "My Badges";
+}
+
+<h1 class="mb-4">🏆 @ViewData["Title"]</h1>
+
+@if (Model.Any())
+{
+    <div class="row">
+        @foreach (var badge in Model)
+        {
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card h-100 text-center">
+                    <div class="card-body">
+                        <img src="@badge.IconUrl" alt="@badge.Name" width="80" class="mb-3" />
+                        <h5 class="card-title">@badge.Name</h5>
+                        <p class="card-text">@badge.Description</p>
+                    </div>
+                    <div class="card-footer text-muted">
+                        Earned: @badge.DateEarnedDisplay
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+else
+{
+    <div class="text-center">
+        <h4>No Badges Yet!</h4>
+        <p>Keep logging your activities to earn new achievement badges.</p>
+    </div>
+}

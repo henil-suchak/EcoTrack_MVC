@@ -15,11 +15,12 @@ namespace EcoTrack.WebMvc.Controllers
     {
         private readonly IActivityService _activityService;
         private readonly ISuggestionService _suggestionService;
-
-        public ActivitiesController(IActivityService activityService, ISuggestionService suggestionService)
+        private readonly IBadgeService _badgeService; 
+        public ActivitiesController(IActivityService activityService, ISuggestionService suggestionService,IBadgeService badgeService)
         {
             _activityService = activityService;
             _suggestionService = suggestionService;
+            _badgeService = badgeService;
         }
 
         // GET: /Activities/Log
@@ -108,7 +109,7 @@ namespace EcoTrack.WebMvc.Controllers
 
                     await _activityService.LogActivityAsync(activityDto);
                     await _suggestionService.GenerateSuggestionsForUserAsync(userId);
-
+                     await _badgeService.CheckAndAwardBadgesAsync(userId);
                     return RedirectToAction("Index", "Home");
                 }
                 catch (Exception ex)

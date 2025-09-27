@@ -51,3 +51,50 @@
         }
     </div>
 </div>
+<div class="col-lg-4 mb-4">
+    <div class="card h-100">
+        <div class="card-header">🏆 My Rankings</div>
+        <div class="card-body">
+            <h5 class="card-title">Weekly</h5>
+            <p class="card-text fs-3">Rank: @(Model.WeeklyRankInfo?.Rank.ToString() ?? "N/A")</p>
+            <hr>
+            <h5 class="card-title">Monthly</h5>
+            <p class="card-text fs-3">Rank: @(Model.MonthlyRankInfo?.Rank.ToString() ?? "N/A")</p>
+        </div>
+         <div class="card-footer">
+            <a asp-controller="Leaderboard" asp-action="Index" class="btn btn-sm btn-outline-primary">View Full Leaderboard</a>
+        </div>
+    </div>
+</div>
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                🏆 My Badges
+            </div>
+            <div class="card-body">
+                @if(Model.EarnedBadges.Any())
+                {
+                    <div class="d-flex flex-wrap">
+                        @foreach (var badge in Model.EarnedBadges)
+                        {
+                            <div class="text-center p-2" 
+                                 data-bs-toggle="tooltip" 
+                                 title="@badge.Description (Earned: @badge.DateEarnedDisplay)">
+                                <img src="@badge.IconUrl" alt="@badge.Name" width="60" />
+                                <div style="font-size: 0.8rem;">@badge.Name</div>
+                            </div>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <p>You haven't earned any badges yet. Keep up the great work!</p>
+                }
+            </div>
+            <div class="card-footer">
+                <a asp-controller="Badges" asp-action="Index" class="btn btn-sm btn-outline-primary">View All Badges</a>
+            </div>
+        </div>
+    </div>
+</div>
