@@ -21,6 +21,7 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
+<<<<<<< HEAD
                         
                         @if (User.Identity != null && User.Identity.IsAuthenticated)
                         {
@@ -34,6 +35,17 @@
                                 <a class="nav-link text-dark" asp-controller="Suggestions" asp-action="Index">My Suggestions</a>
                             </li>
                         }
+=======
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-controller="Activities" asp-action="Log">Log Activity</a>
+                        </li>
+                        <li class="nav-item">
+            <a class="nav-link text-dark" asp-controller="Suggestions" asp-action="Index">My Suggestions</a>
+        </li>
+         <li class="nav-item">
+            <a class="nav-link text-dark" asp-controller="Leaderboard" asp-action="Index">Leaderboard</a>
+        </li>
+>>>>>>> 31899395a45bfa6dac253cf7c2bf2944c398b68d
                     </ul>
 
                     <ul class="navbar-nav">

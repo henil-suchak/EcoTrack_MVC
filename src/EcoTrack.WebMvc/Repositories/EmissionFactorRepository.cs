@@ -12,12 +12,10 @@ namespace EcoTrack.WebMvc.Repositories
         {
 
         }
-        public async Task<EmissionFactor?> GetFactorAsync(string activityType, string subType)
+        public async Task<EmissionFactor?>  GetFactorAsync(string activityType, string subType)
         {
             return await _context.EmissionFactors
-        .FirstOrDefaultAsync(ef =>
-            ef.ActivityType.ToLower() == activityType.ToLower() &&
-            ef.SubType.ToLower() == subType.ToLower());
+                .FirstOrDefaultAsync(ef => ef.ActivityType == activityType && ef.SubType == subType);
         }
     }
 }

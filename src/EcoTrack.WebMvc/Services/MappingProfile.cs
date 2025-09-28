@@ -17,6 +17,9 @@ namespace EcoTrack.WebMvc.Services
             CreateMap<User, UserEditViewModel>();
             CreateMap<User, UserProfileViewModel>();
             CreateMap<DashboardDto, DashboardViewModel>();
+             CreateMap<Badge, BadgeViewModel>()
+                .ForMember(dest => dest.DateEarnedDisplay, opt => opt.MapFrom(src => src.DateEarned.ToString("MMMM dd, yyyy")));
+
 
             // Specific mappings for each derived type
             CreateMap<TravelActivity, TravelActivityViewModel>();
