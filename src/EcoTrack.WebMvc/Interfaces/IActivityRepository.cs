@@ -12,6 +12,8 @@ namespace EcoTrack.WebMvc.Interfaces
         Task<IEnumerable<Activity>> GetByUserIdAsync(Guid userId);
         Task<IEnumerable<Activity>> GetActivitiesByUserIdSince(Guid userId, DateTime sinceDate);
         Task<IEnumerable<Activity>> GetActivitiesSince(DateTime sinceDate);
-          Task<IEnumerable<Activity>> GetActivitiesForUserListSince(List<Guid> userIds, DateTime sinceDate);
+        Task<IEnumerable<Activity>> GetActivitiesForUserListSince(List<Guid> userIds, DateTime sinceDate);
+        // Change the GetUserStatsAsync signature
+        Task<(int, decimal)> GetUserStatsAsync(Guid userId, DateTime startDate, DateTime endDate);
     }
 }

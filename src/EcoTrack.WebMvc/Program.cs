@@ -18,7 +18,16 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlite(connectionString));
 
-// 3. Register all your repositories.
+// 3. Configure Cookie Authentication.
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/Users/Login"; // Redirect here if a user is not logged in
+        options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
+        options.SlidingExpiration = true;
+    });
+
+// 4. Register all your repositories.
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IActivityRepository, ActivityRepository>();
 builder.Services.AddScoped<IBadgeRepository, BadgeRepository>();
@@ -27,25 +36,21 @@ builder.Services.AddScoped<ILeaderboardEntryRepository, LeaderboardEntryReposito
 builder.Services.AddScoped<IFamilyRepository, FamilyRepository>();
 builder.Services.AddScoped<IEmissionFactorRepository, EmissionFactorRepository>();
 
-builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-    .AddCookie(options =>
-    {
-        options.LoginPath = "/Users/Login"; // Redirect here if a user is not logged in
-        options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
-        options.SlidingExpiration = true;
-    });
-// 4. Register the Unit of Work.
+// 5. Register the Unit of Work.
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
-// 5. Register your services. (THIS SECTION WAS MISSING)
+// 6. Register your services.
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IActivityService, ActivityService>();
 builder.Services.AddScoped<ISuggestionService, SuggestionService>();
 builder.Services.AddScoped<ILeaderboardService, LeaderboardService>();
 builder.Services.AddScoped<IBadgeService, BadgeService>(); 
 builder.Services.AddScoped<IDashboardService, DashboardService>();
+
+// 7. Register the background service for leaderboard updates.
 builder.Services.AddHostedService<LeaderboardUpdateService>();
-// 6. Register AutoMapper.
+
+// 8. Register AutoMapper.
 builder.Services.AddAutoMapper(typeof(MappingProfile));
 
 // --- END: Service Registration ---
@@ -63,6 +68,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
 
+// Add Authentication and Authorization to the pipeline
 app.UseAuthentication();
 app.UseAuthorization();
 

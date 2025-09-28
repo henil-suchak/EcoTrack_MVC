@@ -22,13 +22,11 @@ namespace EcoTrack.WebMvc.Controllers
             _suggestionService = suggestionService;
         }
 
-        // GET: /Activities/Log
         public IActionResult Log()
         {
             return View(new LogActivityViewModel());
         }
 
-        // POST: /Activities/Log
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Log(LogActivityViewModel viewModel)
@@ -42,16 +40,19 @@ namespace EcoTrack.WebMvc.Controllers
                     if (viewModel.Distance <= 0)
                         ModelState.AddModelError("Distance", "Distance must be a positive number.");
                     break;
+
                 case ActivityType.Food:
                     if (string.IsNullOrWhiteSpace(viewModel.FoodType))
                         ModelState.AddModelError("FoodType", "Type of Food is required.");
                     if (viewModel.Quantity <= 0)
                         ModelState.AddModelError("Quantity", "Quantity must be a positive number.");
                     break;
+
                 case ActivityType.Electricity:
                     if (viewModel.ElectricityConsumption <= 0)
                         ModelState.AddModelError("ElectricityConsumption", "Consumption must be a positive number.");
                     break;
+
                 case ActivityType.Appliance:
                     if (string.IsNullOrWhiteSpace(viewModel.ApplianceType))
                         ModelState.AddModelError("ApplianceType", "Appliance Type is required.");
@@ -60,6 +61,7 @@ namespace EcoTrack.WebMvc.Controllers
                     if (viewModel.PowerRating <= 0)
                         ModelState.AddModelError("PowerRating", "Power Rating must be a positive number.");
                     break;
+
                 case ActivityType.Waste:
                     if (string.IsNullOrWhiteSpace(viewModel.WasteType))
                         ModelState.AddModelError("WasteType", "Waste Type is required.");
@@ -75,47 +77,36 @@ namespace EcoTrack.WebMvc.Controllers
 
             try
             {
-                // ... inside the [HttpPost] Log method ...
-
-                try
+                var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                if (!Guid.TryParse(userIdString, out var userId))
                 {
-                    var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
-                    if (!Guid.TryParse(userIdString, out var userId))
-                    {
-                        return Unauthorized();
-                    }
-
-                    // Create the DTO from the ViewModel
-                    var activityDto = new LogActivityDto
-                    {
-                        UserId = userId,
-                        // CORRECTED: Use .Value to safely get the non-nullable value
-                        ActivityType = viewModel.ActivityType.Value,
-
-                        // Use .GetValueOrDefault() for the other nullable decimals
-                        Distance = viewModel.Distance.GetValueOrDefault(),
-                        Quantity = viewModel.Quantity.GetValueOrDefault(),
-                        ElectricityConsumption = viewModel.ElectricityConsumption.GetValueOrDefault(),
-                        UsageTime = viewModel.UsageTime.GetValueOrDefault(),
-                        PowerRating = viewModel.PowerRating.GetValueOrDefault(),
-                        Amount = viewModel.Amount.GetValueOrDefault(),
-
-                        TravelMode = viewModel.TravelMode,
-                        FoodType = viewModel.FoodType,
-                        ApplianceType = viewModel.ApplianceType,
-                        WasteType = viewModel.WasteType
-                    };
-
-                    await _activityService.LogActivityAsync(activityDto);
-                    await _suggestionService.GenerateSuggestionsForUserAsync(userId);
-
-                    return RedirectToAction("Index", "Home");
+                    return Unauthorized();
                 }
-                catch (Exception ex)
+
+                // Create the DTO from the ViewModel
+                var activityDto = new LogActivityDto
                 {
-                    ModelState.AddModelError("", $"An error occurred: {ex.Message}");
-                    return View(viewModel);
-                }
+                    UserId = userId,
+                    ActivityType = viewModel.ActivityType!.Value,
+                    TravelMode = viewModel.TravelMode,
+                    Distance = viewModel.Distance.GetValueOrDefault(),
+                    FoodType = viewModel.FoodType,
+                    Quantity = viewModel.Quantity.GetValueOrDefault(),
+                    ElectricityConsumption = viewModel.ElectricityConsumption.GetValueOrDefault(),
+                    ApplianceType = viewModel.ApplianceType,
+                    UsageTime = viewModel.UsageTime.GetValueOrDefault(),
+                    PowerRating = viewModel.PowerRating.GetValueOrDefault(),
+                    WasteType = viewModel.WasteType,
+                    Amount = viewModel.Amount.GetValueOrDefault()
+                };
+
+                // 1. Log the new activity and get the created object back
+                var newActivity = await _activityService.LogActivityAsync(activityDto);
+
+                // 2. Pass that specific activity to the suggestion service
+                await _suggestionService.GenerateSuggestionsForActivityAsync(newActivity);
+
+                return RedirectToAction("Index", "Home");
             }
             catch (Exception ex)
             {

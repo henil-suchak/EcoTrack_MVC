@@ -32,121 +32,95 @@ namespace EcoTrack.WebMvc.Services
             }
         }
 
-        public async Task GenerateSuggestionsForUserAsync(Guid userId)
+        public async Task GenerateSuggestionsForActivityAsync(Activity activity)
         {
-            var recentActivities = await _unitOfWork.ActivityRepository.GetByUserIdAsync(userId);
-            var unreadSuggestions = await GetUnreadSuggestionsAsync(userId);
-            bool hasNewSuggestion = false;
+            string? suggestionText = null;
+            string category = "";
 
-            // --- Business Rule for Travel ---
-            var shortCarTrips = recentActivities.OfType<TravelActivity>()
-                .Where(t => t.Mode == "Car" && t.Distance < 5);
-
-            if (shortCarTrips.Any())
+            // Use a switch to create a specific suggestion for the logged activity
+            switch (activity)
             {
-                var suggestionText = "We noticed you took a short car trip. Try cycling or walking next time to save CO₂!";
-                if (!unreadSuggestions.Any(s => s.Description == suggestionText))
-                {
-                    // CORRECTED: The object is now fully populated
-                    var newSuggestion = new Suggestion
+                // UPDATED: This case now has its own switch for subtypes
+                case TravelActivity travel:
+                    category = "Travel";
+                    switch (travel.Mode.ToLower()) // Check the specific mode
                     {
-                        UserId = userId,
-                        Description = suggestionText,
-                        Category = "Travel",
-                        SavingAmount = 1.5m, // Placeholder saving amount
-                        IsRead = false,
-                        DateTimeIssued = DateTime.UtcNow
-                    };
-                    await _unitOfWork.SuggestionRepository.AddAsync(newSuggestion);
-                    hasNewSuggestion = true;
-                }
-            }
-            // --- Business Rule for Food ---
-            var meatMeals = recentActivities.OfType<FoodActivity>()
-                .Count(f => f.FoodType.ToLower() == "beef" || f.FoodType.ToLower() == "lamb");
+                        case "car" when travel.Distance < 5:
+                            suggestionText = "We noticed you took a short car trip. Try cycling or walking next time!";
+                            break;
+                        case "bus":
+                            suggestionText = "Taking the bus is a great choice for reducing traffic and emissions!";
+                            break;
+                        case "train":
+                            suggestionText = "Train travel is one of the most eco-friendly ways to travel long distances. Great job!";
+                            break;
+                    }
+                    break;
 
-            if (meatMeals > 1)
-            {
-                var suggestionText = "Reducing meat consumption is a great way to lower your footprint. How about trying a 'Meatless Monday'?";
-                if (!unreadSuggestions.Any(s => s.Description == suggestionText))
-                {
-                    // CORRECTED: The object is now fully populated
-                    await _unitOfWork.SuggestionRepository.AddAsync(new Suggestion
+                // UPDATED: This case now handles multiple food subtypes
+                case FoodActivity food:
+                    category = "Food";
+                    switch (food.FoodType.ToLower()) // Check the specific food type
                     {
-                        UserId = userId,
-                        Description = suggestionText,
-                        Category = "Food",
-                        SavingAmount = 20m,
-                        IsRead = false,
-                        DateTimeIssued = DateTime.UtcNow
-                    });
-                    hasNewSuggestion = true;
-                }
-            }
+                        case "beef":
+                        case "lamb":
+                            suggestionText = "Reducing red meat consumption is a great way to lower your footprint. How about trying chicken or vegetables?";
+                            break;
+                        case "chicken":
+                            suggestionText = "Chicken is a great lower-impact choice. To reduce your footprint even further, consider plant-based proteins like beans or lentils.";
+                            break;
+                        case "vegetables":
+                            suggestionText = "Excellent choice! Plant-based meals are one of the best ways to reduce your carbon footprint.";
+                            break;
+                    }
+                    break;
 
-            // --- Business Rule for Electricity ---
-            var totalKwh = recentActivities.OfType<ElectricityActivity>().Sum(e => e.Consumption);
-            if (totalKwh > 70)
-            {
-                var suggestionText = "Your electricity usage seems high. Try switching to LED bulbs or unplugging electronics when not in use.";
-                if (!unreadSuggestions.Any(s => s.Description == suggestionText))
-                {
-                    await _unitOfWork.SuggestionRepository.AddAsync(new Suggestion
-                    {
-                        UserId = userId,
-                        Description = suggestionText,
-                        Category = "Electricity",
-                        SavingAmount = 5m,
-                        IsRead = false,
-                        DateTimeIssued = DateTime.UtcNow
-                    });
-                    hasNewSuggestion = true;
-                }
-            }
+                case ElectricityActivity electricity when electricity.Consumption > 20: // e.g., > 20 kWh in one go
+                    suggestionText = "High electricity usage can be reduced by switching to LED bulbs and energy-efficient appliances.";
+                    category = "Electricity";
+                    break;
 
-            // --- Business Rule for Appliance ---
-            var acUsageHours = recentActivities.OfType<ApplianceActivity>().Where(a => a.ApplianceType == "AC").Sum(a => a.UsageTime);
-            if (acUsageHours > 10)
-            {
-                var suggestionText = "Using your AC contributes to your footprint. Consider using a fan or setting the thermostat a few degrees higher.";
-                if (!unreadSuggestions.Any(s => s.Description == suggestionText))
-                {
-                    await _unitOfWork.SuggestionRepository.AddAsync(new Suggestion
+                case WasteActivity waste:
+                    category = "Waste";
+                    switch (waste.WasteType.ToLower()) // Check the specific waste type
                     {
-                        UserId = userId,
-                        Description = suggestionText,
-                        Category = "Appliance",
-                        SavingAmount = 8m,
-                        IsRead = false,
-                        DateTimeIssued = DateTime.UtcNow
-                    });
-                    hasNewSuggestion = true;
-                }
+                        case "landfill" when waste.Amount > 2:
+                            suggestionText = "Composting food scraps and choosing products with less packaging can greatly reduce landfill waste.";
+                            break;
+                        case "recyclable":
+                            suggestionText = "Great job recycling! This significantly reduces the need for raw materials and saves energy.";
+                            break;
+                    }
+                    break;
+                case ApplianceActivity appliance:
+                    category = "Appliance";
+                    // Example: Suggest an alternative if a high-power appliance is used for a long time
+                    if (appliance.ApplianceType.ToLower() == "ac" && appliance.UsageTime > 2)
+                    {
+                        suggestionText = "Using your AC contributes to your footprint. Consider using a fan or setting the thermostat a few degrees higher.";
+                    }
+                    else if (appliance.PowerRating > 1500) // For any other high-power appliance
+                    {
+                        suggestionText = "High-power appliances can use a lot of energy. Remember to turn them off when not in use!";
+                    }
+                    break;
+
             }
 
-            // --- Business Rule for Waste ---
-            var landfillAmount = recentActivities.OfType<WasteActivity>().Where(w => w.WasteType == "Landfill").Sum(w => w.Amount);
-            if (landfillAmount > 5)
+            // If a relevant suggestion was found, create and save it.
+            if (!string.IsNullOrEmpty(suggestionText))
             {
-                var suggestionText = "Composting food scraps and choosing products with less packaging can greatly reduce landfill waste.";
-                if (!unreadSuggestions.Any(s => s.Description == suggestionText))
+                var newSuggestion = new Suggestion
                 {
-                    await _unitOfWork.SuggestionRepository.AddAsync(new Suggestion
-                    {
-                        UserId = userId,
-                        Description = suggestionText,
-                        Category = "Waste",
-                        SavingAmount = 3m,
-                        IsRead = false,
-                        DateTimeIssued = DateTime.UtcNow
-                    });
-                    hasNewSuggestion = true;
-                }
-            }
-
-            // Save any new suggestions that were created.
-            if (hasNewSuggestion)
-            {
+                    SuggestionId = Guid.NewGuid(),
+                    UserId = activity.UserId,
+                    Description = suggestionText,
+                    Category = category,
+                    SavingAmount = 0, // You can calculate a more specific saving later
+                    IsRead = false,
+                    DateTimeIssued = DateTime.UtcNow
+                };
+                await _unitOfWork.SuggestionRepository.AddAsync(newSuggestion);
                 await _unitOfWork.CompleteAsync();
             }
         }

@@ -46,11 +46,31 @@ namespace EcoTrack.WebMvc.Repositories
                 .Where(a => a.DateTime >= sinceDate)
                 .ToListAsync();
         }
-     public async Task<IEnumerable<Activity>> GetActivitiesForUserListSince(List<Guid> userIds, DateTime sinceDate)
-    {
-        return await _context.Activities
-            .Where(a => userIds.Contains(a.UserId) && a.DateTime >= sinceDate)
-            .ToListAsync();
-    }
+        public async Task<IEnumerable<Activity>> GetActivitiesForUserListSince(List<Guid> userIds, DateTime sinceDate)
+        {
+            return await _context.Activities
+                .Where(a => userIds.Contains(a.UserId) && a.DateTime >= sinceDate)
+                .ToListAsync();
+        }
+        public async Task<decimal> GetTotalEmissionsForUserAsync(Guid userId, DateTime since)
+        {
+            return await _context.Activities
+                .Where(a => a.UserId == userId && a.DateTime >= since)
+                .SumAsync(a => a.CarbonEmission);
+        }
+        // In your ActivityRepository class, add this new method:
+        public async Task<(int, decimal)> GetUserStatsAsync(Guid userId, DateTime startDate, DateTime endDate)
+        {
+            // Add one day to the end date to include all activities on that day
+            var inclusiveEndDate = endDate.AddDays(1);
+
+            var query = _context.Activities
+                .Where(a => a.UserId == userId && a.DateTime >= startDate && a.DateTime < inclusiveEndDate);
+
+            var count = await query.CountAsync();
+            var totalEmissions = await query.SumAsync(a => a.CarbonEmission);
+
+            return (count, totalEmissions);
+        }
     }
 }

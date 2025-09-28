@@ -10,12 +10,12 @@ namespace EcoTrack.WebMvc.ViewModels
         public ActivityType? ActivityType { get; set; } // Make the enum nullable
 
         // --- Travel Properties ---
-        [Display(Name = "Mode of Transport (e.g., Car, Bus)")]
+        [Display(Name = "Mode of Transport (e.g., Car, Bus,Train)")]
         public string? TravelMode { get; set; }
         public decimal? Distance { get; set; }
 
         // --- Food Properties ---
-        [Display(Name = "Type of Food (e.g., Beef, Chicken)")]
+        [Display(Name = "Type of Food (e.g., Beef, Chicken,vegetables)")]
         public string? FoodType { get; set; }
         public decimal? Quantity { get; set; }
 
@@ -24,7 +24,7 @@ namespace EcoTrack.WebMvc.ViewModels
         public decimal? ElectricityConsumption { get; set; }
 
         // --- Appliance Properties ---
-        [Display(Name = "Appliance Type (e.g., Fridge, AC)")]
+        [Display(Name = "Appliance Type (e.g., Fridge, AC,Grid)")]
         public string? ApplianceType { get; set; }
         [Display(Name = "Usage Time (hours)")]
         public decimal? UsageTime { get; set; }
@@ -32,7 +32,7 @@ namespace EcoTrack.WebMvc.ViewModels
         public decimal? PowerRating { get; set; }
         
         // --- Waste Properties ---
-        [Display(Name = "Waste Type (e.g., Recyclable)")]
+        [Display(Name = "Waste Type (e.g., Recyclable,Landfill)")]
         public string? WasteType { get; set; }
         [Display(Name = "Amount (kg)")]
         public decimal? Amount { get; set; }

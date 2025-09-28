@@ -49,7 +49,7 @@ namespace EcoTrack.WebMvc.Services
             newActivity.UserId = dto.UserId;
             newActivity.ActivityType = dto.ActivityType;
             
-            string subType = GetSubTypeForActivity(newActivity);
+            string subType = GetSubTypeForActivity(newActivity).ToLower();
             var factor = await _unitOfWork.EmissionFactorRepository.GetFactorAsync(
                 newActivity.ActivityType.ToString(), 
                 subType);

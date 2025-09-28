@@ -21,6 +21,7 @@ namespace EcoTrack.WebMvc.Repositories
         {
             return await _context.Suggestions
                 .Where(s => s.UserId == userId && s.IsRead == false)
+                .OrderByDescending(s=>s.DateTimeIssued)
                 .ToListAsync();
         }
         public async Task<IEnumerable<Suggestion>> GetAllByUserIdAsync(Guid userId)

@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using EcoTrack.WebMvc.DTO;
 using EcoTrack.WebMvc.Interfaces;
+using EcoTrack.WebMvc.ViewModels;
 
 namespace EcoTrack.WebMvc.Services
 {
@@ -37,6 +38,20 @@ namespace EcoTrack.WebMvc.Services
             };
 
             return dashboardData;
+        }
+        // In your DashboardService class, add this new method:
+        public async Task<DashboardStatsViewModel> GetUserStatsAsync(Guid userId, DateTime startDate, DateTime endDate)
+        {
+            // The repository is now called with the specific dates
+            var (count, total) = await _unitOfWork.ActivityRepository.GetUserStatsAsync(userId, startDate, endDate);
+
+            return new DashboardStatsViewModel
+            {
+                NumberOfActivities = count,
+                TotalCarbonEmitted = total,
+                StartDate = startDate,
+                EndDate = endDate
+            };
         }
     }
 }

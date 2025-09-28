@@ -1,0 +1,46 @@
+@model EcoTrack.WebMvc.ViewModels.DashboardStatsViewModel
+@{
+    ViewData["Title"] = "Emission Statistics";
+}
+
+<div class="d-flex justify-content-between align-items-center">
+    <div>
+        <h1>@ViewData["Title"]</h1>
+        <p>Select a date range to see your emission statistics for that period.</p>
+    </div>
+    <div>
+        <a asp-action="Index" asp-controller="Dashboard" class="btn btn-secondary">Back to Dashboard</a>
+    </div>
+</div>
+<hr />
+
+<div class="card">
+    <div class="card-body">
+        <form asp-action="Statistics" method="post" class="row g-3 align-items-end">
+            <div class="col-auto">
+                <label asp-for="StartDate" class="form-label"></label>
+                <input asp-for="StartDate" class="form-control" />
+            </div>
+            <div class="col-auto">
+                <label asp-for="EndDate" class="form-label"></label>
+                <input asp-for="EndDate" class="form-control" />
+            </div>
+            <div class="col-auto">
+                <button type="submit" class="btn btn-primary">Get Stats</button>
+            </div>
+        </form>
+        <hr />
+        <div class="row text-center mt-3">
+            <div class="col">
+                <h6 class="card-title">Total Emissions</h6>
+                <p class="card-text display-4">@Model.TotalCarbonEmitted.ToString("F2")</p>
+                <p class="card-text"><small class="text-muted">kg CO₂</small></p>
+            </div>
+            <div class="col">
+                <h6 class="card-title">Activities Logged</h6>
+                <p class="card-text display-4">@Model.NumberOfActivities</p>
+                <p class="card-text"><small class="text-muted">in this period</small></p>
+            </div>
+        </div>
+    </div>
+</div>

@@ -21,12 +21,19 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Activities" asp-action="Log">Log Activity</a>
-                        </li>
-                        <li class="nav-item">
-            <a class="nav-link text-dark" asp-controller="Suggestions" asp-action="Index">My Suggestions</a>
-        </li>
+                        
+                        @if (User.Identity != null && User.Identity.IsAuthenticated)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="Dashboard" asp-action="Index">My Dashboard</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="Activities" asp-action="Log">Log Activity</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="Suggestions" asp-action="Index">My Suggestions</a>
+                            </li>
+                        }
                     </ul>
 
                     <ul class="navbar-nav">
@@ -40,7 +47,6 @@
                                     <button type="submit" class="nav-link btn btn-link text-dark">Logout</button>
                                 </form>
                             </li>
-                  
                         }
                         else
                         {
@@ -52,7 +58,7 @@
                             </li>
                         }
                     </ul>
-                    </div>
+                </div>
             </div>
         </nav>
     </header>

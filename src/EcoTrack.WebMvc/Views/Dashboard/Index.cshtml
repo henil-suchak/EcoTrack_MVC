@@ -10,6 +10,8 @@
         <p class="lead">Here's a summary of your carbon footprint.</p>
     </div>
     <div class="col-md-4 text-md-end">
+        <a asp-action="Statistics" asp-controller="Dashboard" class="btn btn-info mt-2">Emission Statistics</a>
+        
         <a asp-action="Edit" asp-controller="Users" asp-route-id="@Model.UserProfile.UserId" class="btn btn-primary mt-2">Edit Profile</a>
     </div>
 </div>
