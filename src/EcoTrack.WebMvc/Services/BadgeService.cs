@@ -31,7 +31,7 @@ namespace EcoTrack.WebMvc.Services
                     UserId = userId,
                     Name = "First Step",
                     Description = "Awarded for logging your first activity.",
-                    IconUrl = "/images/badges/first_step.png", // Example path
+                    IconUrl = "/images/badges/fiest_step.jpeg", // Example path
                     DateEarned = DateTime.UtcNow
                 };
                 await _unitOfWork.BadgeRepository.AddAsync(newBadge);
@@ -51,7 +51,7 @@ namespace EcoTrack.WebMvc.Services
                         UserId = userId,
                         Name = "Green Commuter",
                         Description = "Awarded for 5 eco-friendly commutes.",
-                        IconUrl = "/images/badges/green_commuter.png",
+                        IconUrl = "/images/badges/green.jpeg",
                         DateEarned = DateTime.UtcNow
                     };
                     await _unitOfWork.BadgeRepository.AddAsync(newBadge);

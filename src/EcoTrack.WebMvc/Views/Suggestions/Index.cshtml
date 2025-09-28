@@ -4,47 +4,266 @@
     ViewData["Title"] = ViewBag.Title;
 }
 
-<div class="d-flex justify-content-between align-items-center mb-4">
-    <h1>@ViewData["Title"]</h1>
-    <div>
-        @if (ViewBag.ShowAll)
-        {
-            <a asp-action="Index" asp-route-showAll="false" class="btn btn-secondary">Show Unread Only</a>
-        }
-        else
-        {
-            <a asp-action="Index" asp-route-showAll="true" class="btn btn-primary">Show All Suggestions</a>
-        }
+<div class="suggestions-container">
+    <div class="suggestions-card">
+        <div class="suggestions-header">
+            <div class="d-flex justify-content-between align-items-center">
+                <h2><i class="bi bi-lightbulb-fill me-2"></i>@ViewData["Title"]</h2>
+                <div>
+                    @if (ViewBag.ShowAll)
+                    {
+                        <a asp-action="Index" asp-route-showAll="false" class="toggle-btn">
+                            <i class="bi bi-filter me-1"></i> Show Unread Only
+                        </a>
+                    }
+                    else
+                    {
+                        <a asp-action="Index" asp-route-showAll="true" class="toggle-btn active">
+                            <i class="bi bi-list me-1"></i> Show All Suggestions
+                        </a>
+                    }
+                </div>
+            </div>
+            <p class="subtitle">Personalized tips to help reduce your carbon footprint.</p>
+        </div>
+
+        <div class="suggestions-body">
+            @if (!Model.Any())
+            {
+                <div class="empty-state">
+                    <i class="bi bi-inbox-fill"></i>
+                    <p>You have no new suggestions.</p>
+                    <span>Keep logging activities to get personalized tips!</span>
+                </div>
+            }
+            else
+            {
+                <div class="suggestions-list">
+                    @foreach (var suggestion in Model)
+                    {
+                        <div class="suggestion-item">
+                            <div class="suggestion-content">
+                                <div class="category-badge @GetCategoryClass(suggestion.Category)">
+                                    @Html.Raw(GetCategoryIcon(suggestion.Category)) @suggestion.Category
+                                </div>
+                                <p class="suggestion-text">@suggestion.Description</p>
+                                <div class="suggestion-meta">
+                                    <span class="saving">
+                                        <i class="bi bi-piggy-bank"></i> Potential Saving: @suggestion.SavingAmountDisplay
+                                    </span>
+                                    <span class="date">
+                                        <i class="bi bi-calendar3"></i> Received: @suggestion.DateIssuedDisplay
+                                    </span>
+                                </div>
+                            </div>
+
+                            @if (ViewBag.ShowAll == false)
+                            {
+                                <div class="suggestion-action">
+                                    <form asp-action="MarkAsRead" method="post">
+                                        <input type="hidden" name="suggestionId" value="@suggestion.SuggestionId" />
+                                        <button type="submit" class="action-btn">
+                                            <i class="bi bi-check2"></i> Mark as Read
+                                        </button>
+                                    </form>
+                                </div>
+                            }
+                        </div>
+                    }
+                </div>
+            }
+        </div>
     </div>
 </div>
 
-@if (!Model.Any())
-{
-    <div class="alert alert-info" role="alert">
-        You have no new suggestions. Keep logging activities to get personalized tips!
-    </div>
-}
-else
-{
-    <div class="list-group">
-        @foreach (var suggestion in Model)
+@functions {
+    string GetCategoryClass(string category)
+    {
+        return category.ToLower() switch
         {
-            <div class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
-                <div>
-                    <h5 class="mb-1">@suggestion.Category</h5>
-                    <p class="mb-1">@suggestion.Description</p>
-                    <small class="text-muted">Potential Saving: @suggestion.SavingAmountDisplay | Received: @suggestion.DateIssuedDisplay</small>
-                </div>
-                
-                @* Only show the "Mark as Read" button for unread suggestions *@
-                @if (ViewBag.ShowAll == false)
-                {
-                    <form asp-action="MarkAsRead" method="post" class="ms-3">
-                        <input type="hidden" name="suggestionId" value="@suggestion.SuggestionId" />
-                        <button type="submit" class="btn btn-sm btn-outline-success">Mark as Read</button>
-                    </form>
-                }
-            </div>
-        }
-    </div>
+            "food" => "food",
+            "travel" => "travel",
+            "energy" => "energy",
+            "water" => "water",
+            "waste" => "waste",
+            _ => "other"
+        };
+    }
+
+    string GetCategoryIcon(string category)
+    {
+        return category.ToLower() switch
+        {
+            "food" => "<i class=\"bi bi-egg-fried\"></i>",
+            "travel" => "<i class=\"bi bi-car-front\"></i>",
+            "energy" => "<i class=\"bi bi-lightning\"></i>",
+            "water" => "<i class=\"bi bi-droplet\"></i>",
+            "waste" => "<i class=\"bi bi-trash\"></i>",
+            _ => "<i class=\"bi bi-info-circle\"></i>"
+        };
+    }
 }
+
+<style>
+body {
+    background-color: #f5f5f5;
+    font-family: Arial, sans-serif;
+    color: #333;
+}
+
+.suggestions-container {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+}
+
+.suggestions-card {
+    background-color: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid #e0e0e0;
+}
+
+.suggestions-header {
+    background-color: #fff;
+    padding: 1.5rem;
+    border-bottom: 1px solid #e0e0e0;
+    text-align: center;
+}
+
+.suggestions-header h2 {
+    margin: 0;
+    font-size: 1.6rem;
+    font-weight: 600;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.suggestions-header .subtitle {
+    font-size: 0.95rem;
+    color: #666;
+    margin-top: 0.5rem;
+}
+
+.toggle-btn {
+    padding: 0.4rem 1rem;
+    border-radius: 20px;
+    border: 1px solid #2a9d8f;
+    background-color: #fff;
+    color: #2a9d8f;
+    font-weight: 500;
+    text-decoration: none;
+    transition: 0.2s;
+}
+
+.toggle-btn.active {
+    background-color: #2a9d8f;
+    color: #fff;
+}
+
+.suggestions-body {
+    padding: 1rem 1.5rem;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 2rem;
+    color: #777;
+}
+
+.empty-state i {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.suggestions-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.suggestion-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem;
+    background-color: #fafafa;
+    border-left: 4px solid #2a9d8f;
+    border-radius: 8px;
+}
+
+.suggestion-content {
+    flex: 1;
+}
+
+.category-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.25rem 0.6rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #fff;
+    margin-bottom: 0.5rem;
+}
+
+.category-badge.food { background-color: #E9C46A; }
+.category-badge.travel { background-color: #2A9D8F; }
+.category-badge.energy { background-color: #E76F51; }
+.category-badge.water { background-color: #457B9D; }
+.category-badge.waste { background-color: #6C757D; }
+.category-badge.other { background-color: #264653; }
+
+.suggestion-text {
+    margin: 0.3rem 0 0.5rem 0;
+    font-size: 1rem;
+}
+
+.suggestion-meta {
+    font-size: 0.85rem;
+    color: #666;
+    display: flex;
+    gap: 1rem;
+}
+
+.suggestion-meta i {
+    margin-right: 0.3rem;
+}
+
+.action-btn {
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    border: 1px solid #2a9d8f;
+    background-color: #fff;
+    color: #2a9d8f;
+    font-weight: 500;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.action-btn:hover {
+    background-color: #2a9d8f;
+    color: #fff;
+}
+
+/* Responsive */
+@@media (max-width: 768px) {
+    .suggestion-item {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .action-btn {
+        margin-top: 0.5rem;
+    }
+
+    .suggestion-meta {
+        flex-direction: column;
+        gap: 0.3rem;
+    }
+}
+</style>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">

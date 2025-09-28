@@ -2,7 +2,114 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="container py-5">
+
+    <!-- Hero Section -->
+    <div class="row align-items-center text-center text-md-start mb-5">
+        <div class="col-md-6 mb-4 mb-md-0">
+            <img src="~/images/home.jpeg" 
+                 class="img-fluid rounded shadow-lg" 
+                 alt="Carbon Footprint">
+        </div>
+        <div class="col-md-6">
+            <h1 class="display-5 fw-bold text-dark">Measure Your Carbon Footprint</h1>
+            <p class="lead text-muted">Take control of your environmental impact with our easy-to-use carbon emission calculator. Understand, measure, and reduce your carbon footprint with actionable insights.</p>
+            <a href="#" class="btn btn-success btn-lg shadow-sm">Start Calculating →</a>
+        </div>
+    </div>
 </div>
+
+<!-- Features Section -->
+<section class="py-5" style="background-color: #f9fafb;">
+    <div class="container">
+        <h2 class="text-center fw-bold mb-4 text-dark">Why Use Our Calculator</h2>
+        <div class="row text-center">
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 shadow-sm border-0 rounded-3">
+                    <div class="card-body">
+                        <i class="bi bi-graph-up text-success fs-2 mb-3"></i>
+                        <h5 class="card-title fw-semibold">Accurate Measurements</h5>
+                        <p class="card-text text-muted">Our calculator uses the latest scientific data and methodologies to provide precise carbon emission estimates.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 shadow-sm border-0 rounded-3">
+                    <div class="card-body">
+                        <i class="bi bi-lightbulb text-success fs-2 mb-3"></i>
+                        <h5 class="card-title fw-semibold">Personalized Insights</h5>
+                        <p class="card-text text-muted">Get tailored recommendations based on your lifestyle and consumption patterns to reduce your carbon footprint.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 shadow-sm border-0 rounded-3">
+                    <div class="card-body">
+                        <i class="bi bi-bar-chart text-success fs-2 mb-3"></i>
+                        <h5 class="card-title fw-semibold">Comprehensive Data</h5>
+                        <p class="card-text text-muted">Track your progress over time and see how your actions contribute to environmental sustainability.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Carbon Emission Factors Section -->
+<div class="container py-5">
+    <h2 class="text-center fw-bold mb-4 text-dark">Carbon Emission Factors</h2>
+    <div class="row">
+        <div class="col-md-6 mb-4">
+            <h5 class="fw-semibold"><i class="bi bi-car-front text-success me-2"></i> Transportation</h5>
+            <p class="text-muted">Vehicle emissions are a major contributor to your carbon footprint, including cars, planes, and public transit.</p>
+        </div>
+        <div class="col-md-6 mb-4">
+            <h5 class="fw-semibold"><i class="bi bi-house text-success me-2"></i> Home Energy</h5>
+            <p class="text-muted">Electricity and heating account for a significant portion of household carbon emissions.</p>
+        </div>
+        <div class="col-md-6 mb-4">
+            <h5 class="fw-semibold"><i class="bi bi-egg-fried text-success me-2"></i> Food & Diet</h5>
+            <p class="text-muted">Food production, especially meat and dairy, contributes to greenhouse gas emissions through agriculture and transportation.</p>
+        </div>
+        <div class="col-md-6 mb-4">
+            <h5 class="fw-semibold"><i class="bi bi-bag text-success me-2"></i> Consumption</h5>
+            <p class="text-muted">The products you buy have embedded carbon costs from manufacturing to disposal.</p>
+        </div>
+    </div>
+</div>
+
+<!-- Custom CSS -->
+<style>
+    body {
+        font-family: 'Inter', sans-serif;
+        background-color: #ffffff;
+    }
+
+    h1, h2 {
+        color: #2c3e50;
+    }
+
+    .btn-success {
+        background-color: #08546b;
+        border-color: #034661;
+        padding: 0.75rem 1.5rem;
+        font-weight: 600;
+    }
+
+    .btn-success:hover {
+        background-color: #076b96;
+        border-color: #014f5f;
+    }
+
+    .card {
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    }
+</style>
+
+<!-- Bootstrap Icons -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">

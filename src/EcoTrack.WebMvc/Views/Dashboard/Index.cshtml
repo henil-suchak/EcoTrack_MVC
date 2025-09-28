@@ -4,99 +4,245 @@
     ViewData["Title"] = "My Dashboard";
 }
 
-<div class="row mb-4">
-    <div class="col-md-8">
-        <h1>Welcome, @Model.UserProfile.Name!</h1>
-        <p class="lead">Here's a summary of your carbon footprint.</p>
+<div id="dashboard" class="container-fluid py-4">
+    <!-- Header Section -->
+    <div class="row mb-4 align-items-center">
+        <div class="col-md-8">
+            <h1 class="fw-bold">
+                Welcome, @Model.UserProfile.Name!
+            </h1>
+            <p class="lead text-muted">
+                Your eco-friendly activities this week have reduced carbon emissions. Keep up the good work!
+            </p>
+        </div>
+        <div class="col-md-4 text-md-end">
+            <a asp-action="Statistics" asp-controller="Dashboard" 
+               class="btn btn-sm text-white me-2 bg-green">Emission Statistics</a>
+            <a asp-action="Edit" asp-controller="Users" asp-route-id="@Model.UserProfile.UserId" 
+               class="btn btn-sm text-white bg-dark-blue">Edit Profile</a>
+        </div>
     </div>
-    <div class="col-md-4 text-md-end">
-        <a asp-action="Statistics" asp-controller="Dashboard" class="btn btn-info mt-2">Emission Statistics</a>
-        
-        <a asp-action="Edit" asp-controller="Users" asp-route-id="@Model.UserProfile.UserId" class="btn btn-primary mt-2">Edit Profile</a>
+
+    <div class="row g-4">
+        <!-- Left Column (65%) -->
+        <div class="col-lg-8">
+            <!-- Recent Activities -->
+            <div class="card shadow-sm rounded-3 mb-4">
+                <div class="card-header fw-semibold">
+                    📋 Recent Activities
+                </div>
+                <div class="card-body">
+                    @if (Model.RecentActivities.Any())
+                    {
+                        <ul class="list-group list-group-flush">
+                            @foreach (var activity in Model.RecentActivities.Take(5))
+                            {
+                                var color = activity.CarbonEmission < 2 ? "bg-success" 
+                                            : activity.CarbonEmission < 5 ? "bg-warning text-dark"
+                                            : "bg-danger";
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    @activity.GetDescription()
+                                    <span class="badge rounded-pill @color">
+                                        @activity.CarbonEmission.ToString("F2") kg CO₂
+                                    </span>
+                                </li>
+                            }
+                        </ul>
+                    }
+                    else
+                    {
+                        <p class="text-muted">No activities logged yet.</p>
+                    }
+                </div>
+            </div>
+
+            <!-- Suggestions -->
+            <div class="card shadow-sm rounded-3 mb-4">
+                <div class="card-header fw-semibold">
+                    💡 New Suggestions
+                </div>
+                <div class="card-body">
+                    @if (Model.UnreadSuggestions.Any())
+                    {
+                        <ul class="list-group list-group-flush">
+                            @foreach (var suggestion in Model.UnreadSuggestions)
+                            {
+                                <li class="list-group-item">@suggestion.Description</li>
+                            }
+                        </ul>
+                    }
+                    else
+                    {
+                        <p class="text-muted">No new suggestions.</p>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Column (35%) -->
+        <div class="col-lg-4">
+            <!-- Rankings -->
+            <div class="card shadow-sm rounded-3 mb-4">
+                <div class="card-header fw-semibold">
+                    🏆 My Rankings
+                </div>
+                <div class="card-body">
+                    <h6 class="fw-bold">Weekly Rank</h6>
+                    <p class="fs-4 text-success">
+                        @(Model.WeeklyRankInfo?.Rank.ToString() ?? "N/A")
+                    </p>
+                    <hr />
+                    <h6 class="fw-bold">Monthly Rank</h6>
+                    <p class="fs-4 text-muted">
+                        @(Model.MonthlyRankInfo?.Rank.ToString() ?? "N/A")
+                    </p>
+                </div>
+                <div class="card-footer bg-white">
+                    <a asp-controller="Leaderboard" asp-action="Index" 
+                       class="btn btn-sm btn-outline-primary">View Full Leaderboard</a>
+                </div>
+            </div>
+
+            <!-- Weekly Impact -->
+            <div class="card shadow-sm rounded-3 mb-4">
+                <div class="card-header fw-semibold">
+                    🌱 This Week’s Impact
+                </div>
+                <div class="card-body">
+                    <p><strong>CO₂ Saved:</strong> <span class="text-success">15.2 kg (≈ planting 3 trees)</span></p>
+                    <p><strong>Fuel Saved:</strong> <span class="text-success">6.5 liters</span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Badges Section -->
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card shadow-sm rounded-3">
+                <div class="card-header fw-semibold">
+                    🏅 My Badges
+                </div>
+                <div class="card-body">
+                    @if(Model.EarnedBadges.Any())
+                    {
+                        <div class="d-flex flex-wrap">
+                            @foreach (var badge in Model.EarnedBadges)
+                            {
+                                <div class="text-center p-3" 
+                                     data-bs-toggle="tooltip" 
+                                     title="@badge.Description (Earned: @badge.DateEarnedDisplay)">
+                                    <img src="@badge.IconUrl" alt="@badge.Name" width="60" class="mb-2" />
+                                    <div class="badge-label">@badge.Name</div>
+                                </div>
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <p class="text-muted">You haven't earned any badges yet. Keep up the great work!</p>
+                    }
+                </div>
+                <div class="card-footer bg-white">
+                    <a asp-controller="Badges" asp-action="Index" 
+                       class="btn btn-sm btn-outline-primary">View All Badges</a>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
-<div class="row">
-    <div class="col-md-6">
-        <h3>Recent Activities</h3>
-        @if (Model.RecentActivities.Any())
-        {
-            <ul class="list-group">
-                @foreach (var activity in Model.RecentActivities.Take(5))
-                {
-                    <li class="list-group-item">
-                        @activity.GetDescription()
-                        <span class="badge bg-secondary float-end">@activity.CarbonEmission.ToString("F2") kg CO₂</span>
-                    </li>
-                }
-            </ul>
-        }
-        else
-        {
-            <p>No activities logged yet.</p>
-        }
-    </div>
-    <div class="col-md-6">
-        <h3>New Suggestions</h3>
-        @if (Model.UnreadSuggestions.Any())
-        {
-            <ul class="list-group">
-                @foreach (var suggestion in Model.UnreadSuggestions)
-                {
-                    <li class="list-group-item">@suggestion.Description</li>
-                }
-            </ul>
-        }
-        else
-        {
-            <p>No new suggestions.</p>
-        }
-    </div>
-</div>
-<div class="col-lg-4 mb-4">
-    <div class="card h-100">
-        <div class="card-header">🏆 My Rankings</div>
-        <div class="card-body">
-            <h5 class="card-title">Weekly</h5>
-            <p class="card-text fs-3">Rank: @(Model.WeeklyRankInfo?.Rank.ToString() ?? "N/A")</p>
-            <hr>
-            <h5 class="card-title">Monthly</h5>
-            <p class="card-text fs-3">Rank: @(Model.MonthlyRankInfo?.Rank.ToString() ?? "N/A")</p>
-        </div>
-         <div class="card-footer">
-            <a asp-controller="Leaderboard" asp-action="Index" class="btn btn-sm btn-outline-primary">View Full Leaderboard</a>
-        </div>
-    </div>
-</div>
-<div class="row mt-4">
-    <div class="col-12">
-        <div class="card">
-            <div class="card-header">
-                🏆 My Badges
-            </div>
-            <div class="card-body">
-                @if(Model.EarnedBadges.Any())
-                {
-                    <div class="d-flex flex-wrap">
-                        @foreach (var badge in Model.EarnedBadges)
-                        {
-                            <div class="text-center p-2" 
-                                 data-bs-toggle="tooltip" 
-                                 title="@badge.Description (Earned: @badge.DateEarnedDisplay)">
-                                <img src="@badge.IconUrl" alt="@badge.Name" width="60" />
-                                <div style="font-size: 0.8rem;">@badge.Name</div>
-                            </div>
-                        }
-                    </div>
-                }
-                else
-                {
-                    <p>You haven't earned any badges yet. Keep up the great work!</p>
-                }
-            </div>
-            <div class="card-footer">
-                <a asp-controller="Badges" asp-action="Index" class="btn btn-sm btn-outline-primary">View All Badges</a>
-            </div>
-        </div>
-    </div>
-</div>
+<!-- Scoped CSS -->
+<style>
+/* Dashboard scoped styles */
+#dashboard {
+    font-family: 'Inter', sans-serif;
+    background-color: #F8F9FA;
+    color: #333;
+    line-height: 1.6;
+    padding-bottom: 3rem;
+}
+
+/* Headings */
+#dashboard h1, 
+#dashboard h3, 
+#dashboard .card-header {
+    color: #264653;
+}
+
+/* Cards */
+#dashboard .card {
+    border: none;
+    border-radius: 1rem;
+    background: #ffffff;
+    transition: all 0.3s ease;
+}
+#dashboard .card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Card headers */
+#dashboard .card-header {
+    font-size: 1rem;
+    font-weight: 600;
+    background: #fff;
+    border-bottom: 1px solid #eee;
+}
+
+/* Badges inside activity list */
+#dashboard .badge {
+    font-size: 0.8rem;
+    padding: 0.5em 0.75em;
+}
+
+/* Buttons */
+#dashboard .btn {
+    border-radius: 0.5rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+#dashboard .btn:hover {
+    opacity: 0.9;
+}
+
+/* Button colors */
+#dashboard .bg-green { background-color: #2A9D8F; }
+#dashboard .bg-dark-blue { background-color: #264653; }
+
+/* Outline button */
+#dashboard .btn-outline-primary {
+    border-color: #2A9D8F;
+    color: #2A9D8F;
+}
+#dashboard .btn-outline-primary:hover {
+    background-color: #2A9D8F;
+    color: #fff;
+}
+
+/* List groups */
+#dashboard .list-group-item {
+    border: none;
+    border-bottom: 1px solid #f0f0f0;
+    padding: 0.75rem 1rem;
+}
+#dashboard .list-group-item:last-child {
+    border-bottom: none;
+}
+
+/* Tooltip badges */
+#dashboard [data-bs-toggle="tooltip"] {
+    cursor: pointer;
+}
+
+/* Badge label */
+#dashboard .badge-label {
+    font-size: 0.85rem;
+    color:#333;
+}
+
+/* Badge container */
+#dashboard .card-body .d-flex.flex-wrap > div {
+    min-width: 120px;
+}
+</style>
