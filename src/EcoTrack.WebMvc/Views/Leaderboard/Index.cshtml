@@ -1,20 +1,32 @@
-@model IEnumerable<EcoTrack.WebMvc.ViewModels.LeaderboardViewModel>
+@using EcoTrack.WebMvc.ViewModels
+@model LeaderboardPageViewModel
 
 @{
-    ViewData["Title"] = "Weekly Leaderboard";
+    ViewData["Title"] = $"{Model.ActivePeriod} Leaderboard";
     var currentUserId = ViewBag.CurrentUserId != null ? Guid.Parse(ViewBag.CurrentUserId) : Guid.Empty;
 }
 
 <div class="text-center">
-    <h1 class="display-4">🏆 Weekly Leaderboard</h1>
-    <p class="lead">See who's making the biggest impact this week!</p>
+    <h1 class="display-4">🏆 @Model.ActivePeriod Leaderboard</h1>
+    <p class="lead">See who's making the biggest impact!</p>
+
+    <div class="btn-group my-3" role="group">
+        <a asp-action="Index" asp-route-period="Monthly" 
+           class="btn @(Model.ActivePeriod == "Monthly" ? "btn-primary" : "btn-outline-primary")">
+           Monthly
+        </a>
+        <a asp-action="Index" asp-route-period="Weekly" 
+           class="btn @(Model.ActivePeriod == "Weekly" ? "btn-primary" : "btn-outline-primary")">
+           Weekly
+        </a>
+    </div>
 </div>
 
 <div class="row justify-content-center mt-4">
     <div class="col-lg-8">
         <div class="card">
             <div class="card-body">
-                @if (Model.Any())
+                @if (Model.Entries.Any())
                 {
                     <table class="table table-striped table-hover">
                         <thead class="table-dark">
@@ -25,9 +37,8 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach (var entry in Model)
+                            @foreach (var entry in Model.Entries)
                             {
-                                // Highlight the current user's row
                                 var rowClass = entry.UserId == currentUserId ? "table-primary" : "";
                                 <tr class="@rowClass">
                                     <th scope="row">@entry.Rank</th>
@@ -40,7 +51,7 @@
                 }
                 else
                 {
-                    <p class="text-center">The leaderboard is still being calculated. Check back soon!</p>
+                    <p class="text-center">The @Model.ActivePeriod.ToLower() leaderboard is still being calculated. Check back soon!</p>
                 }
             </div>
         </div>

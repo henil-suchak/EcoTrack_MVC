@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using EcoTrack.WebMvc.Models;
 
 namespace EcoTrack.WebMvc.Interfaces
 {
@@ -10,5 +11,6 @@ namespace EcoTrack.WebMvc.Interfaces
         /// </summary>
         /// <param name="userId">The ID of the user to check.</param>
         Task CheckAndAwardBadgesAsync(Guid userId);
+         Task<IEnumerable<Badge>> GetUserBadgesAsync(Guid userId);
     }
 }
