@@ -1,7 +1,7 @@
 using System;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using EcoTrack.WebMvc.DTOs;
+using EcoTrack.WebMvc.DTO;
 using EcoTrack.WebMvc.Enums;
 using EcoTrack.WebMvc.Interfaces;
 using EcoTrack.WebMvc.ViewModels;
