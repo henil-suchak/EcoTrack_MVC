@@ -8,6 +8,7 @@ namespace EcoTrack.WebMvc.Interfaces
     public interface ILeaderboardEntryRepository : IGenericRepository<LeaderboardEntry, Guid>
     {
         Task<IEnumerable<LeaderboardEntry>> GetTopEntriesAsync(string period, int count);
-         Task<LeaderboardEntry?> GetEntryByUserAsync(Guid userId, string period);
+        Task<LeaderboardEntry?> GetEntryByUserAsync(Guid userId, string period);
+        Task<IEnumerable<LeaderboardEntry>> GetEntriesByPeriodAsync(string period); // ADD THIS
     }
 }

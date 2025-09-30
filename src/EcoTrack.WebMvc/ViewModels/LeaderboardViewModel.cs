@@ -2,6 +2,7 @@ using System;
 
 namespace EcoTrack.WebMvc.ViewModels
 {
+    // This represents a SINGLE entry on the leaderboard.
     public class LeaderboardViewModel
     {
         public int Rank { get; set; }

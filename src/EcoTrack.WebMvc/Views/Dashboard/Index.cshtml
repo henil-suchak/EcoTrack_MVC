@@ -35,7 +35,7 @@
                     @if (Model.RecentActivities.Any())
                     {
                         <ul class="list-group list-group-flush">
-                            @foreach (var activity in Model.RecentActivities.Take(5))
+                            @foreach (var activity in Model.RecentActivities.Take(10))
                             {
                                 var color = activity.CarbonEmission < 2 ? "bg-success" 
                                             : activity.CarbonEmission < 5 ? "bg-warning text-dark"

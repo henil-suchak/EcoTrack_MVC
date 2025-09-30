@@ -24,10 +24,19 @@ namespace EcoTrack.WebMvc.Repositories
                 .Take(count)
                 .ToListAsync();
         }
-         public async Task<LeaderboardEntry?> GetEntryByUserAsync(Guid userId, string period)
-    {
-        return await _context.LeaderboardEntries
-            .FirstOrDefaultAsync(e => e.UserId == userId && e.Period == period);
-    }
+        
+        public async Task<LeaderboardEntry?> GetEntryByUserAsync(Guid userId, string period)
+        {
+            return await _context.LeaderboardEntries
+                .FirstOrDefaultAsync(e => e.UserId == userId && e.Period == period);
+        }
+
+        // ADD THIS IMPLEMENTATION
+        public async Task<IEnumerable<LeaderboardEntry>> GetEntriesByPeriodAsync(string period)
+        {
+            return await _context.LeaderboardEntries
+                .Where(e => e.Period == period)
+                .ToListAsync();
+        }
     }
 }

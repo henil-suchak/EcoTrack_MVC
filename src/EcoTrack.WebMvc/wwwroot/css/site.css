@@ -21,15 +21,6 @@ body {
   margin-bottom: 60px;
 }
 
-.form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
-  color: var(--bs-secondary-color);
-  text-align: end;
-}
-
-.form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
-  text-align: start;
-}
-
 /* --- Badges Page Styles --- */
 .badges-grid {
     display: grid;
@@ -56,4 +47,40 @@ body {
 .empty-state {
     padding: 3rem 1rem;
     color: #666;
+}
+
+/* --- Leaderboard Page Styles --- */
+.leaderboard-card {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    overflow: hidden;
+}
+.leaderboard-header {
+    text-align: center;
+    padding: 1.5rem;
+}
+.leaderboard-toggle {
+    display: flex;
+    justify-content: center;
+    padding: 1rem;
+    gap: 1rem;
+    border-bottom: 1px solid #e0e0e0;
+}
+.leaderboard-list-item {
+    display: flex;
+    align-items: center;
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid #e0e0e0;
+}
+.leaderboard-list-item:last-child {
+    border-bottom: none;
+}
+.rank { flex: 0 0 10%; font-size: 1.2rem; font-weight: 600; color: #6c757d; }
+.user-name { flex: 1; font-weight: 500; }
+.score { flex: 0 0 25%; text-align: right; font-weight: 600; color: #2a9d8f; }
+.leaderboard-list-item.current-user {
+    background-color: #e2f5f3;
+    border-left: 4px solid #2a9d8f;
+    font-weight: 600;
 }
