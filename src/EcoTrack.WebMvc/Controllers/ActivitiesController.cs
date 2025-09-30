@@ -104,8 +104,8 @@ namespace EcoTrack.WebMvc.Controllers
                     ApplianceType = viewModel.ApplianceType,
                     WasteType = viewModel.WasteType
                 };
-                
-                // --- Call all necessary services in order ---
+
+                // 1. Log the new activity and get the created object back
                 var newActivity = await _activityService.LogActivityAsync(activityDto);
                 await _suggestionService.GenerateSuggestionsForActivityAsync(newActivity);
                 await _badgeService.CheckAndAwardBadgesAsync(userId);

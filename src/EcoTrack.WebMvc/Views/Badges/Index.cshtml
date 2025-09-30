@@ -1,26 +1,25 @@
-@using EcoTrack.WebMvc.ViewModels
-@model IEnumerable<BadgeViewModel>
+@model IEnumerable<EcoTrack.WebMvc.ViewModels.BadgeViewModel>
 
 @{
     ViewData["Title"] = "My Badges";
 }
 
-<div class="badges-container">
-    <h1 class="page-title">🏆 @ViewData["Title"]</h1>
+<div class="container badges-container">
+    <h1 class="text-center mb-4">🏆 @ViewData["Title"]</h1>
 
     @if (Model.Any())
     {
         <div class="badges-grid">
             @foreach (var badge in Model)
             {
-                <div class="badge-card">
-                    <div class="badge-body">
-                        <img src="@badge.IconUrl" alt="@badge.Name" class="badge-icon" />
-                        <h5 class="badge-title">@badge.Name</h5>
-                        <p class="badge-desc">@badge.Description</p>
+                <div class="card h-100 text-center badge-card">
+                    <div class="card-body d-flex flex-column justify-content-center align-items-center">
+                        <img src="@badge.IconUrl" alt="@badge.Name" class="badge-icon mb-3" />
+                        <h5 class="card-title">@badge.Name</h5>
+                        <p class="card-text text-muted">@badge.Description</p>
                     </div>
-                    <div class="badge-footer">
-                        Earned: @badge.DateEarnedDisplay
+                    <div class="card-footer">
+                        <small>Earned: @badge.DateEarnedDisplay</small>
                     </div>
                 </div>
             }
@@ -28,100 +27,9 @@
     }
     else
     {
-        <div class="empty-state">
+        <div class="text-center empty-state">
             <h4>No Badges Yet!</h4>
             <p>Keep logging your activities to earn new achievement badges.</p>
         </div>
     }
 </div>
-
-<style>
-body {
-    background-color: #f5f5f5;
-    font-family: Arial, sans-serif;
-    color: #333;
-}
-
-.badges-container {
-    max-width: 900px;
-    margin: 2rem auto;
-    padding: 0 1rem;
-}
-
-.page-title {
-    text-align: center;
-    margin-bottom: 2rem;
-    font-size: 1.8rem;
-    font-weight: 600;
-}
-
-.badges-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-    gap: 1.5rem;
-}
-
-.badge-card {
-    background-color: #fff;
-    border-radius: 10px;
-    border: 1px solid #e0e0e0;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    transition: transform 0.2s, box-shadow 0.2s;
-}
-
-.badge-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-}
-
-.badge-body {
-    padding: 1.5rem;
-    text-align: center;
-}
-
-.badge-icon {
-    width: 80px;
-    height: 80px;
-    object-fit: contain;
-    margin-bottom: 1rem;
-}
-
-.badge-title {
-    font-size: 1.1rem;
-    font-weight: 600;
-    margin-bottom: 0.5rem;
-}
-
-.badge-desc {
-    font-size: 0.95rem;
-    color: #666;
-}
-
-.badge-footer {
-    padding: 0.75rem 1.5rem;
-    font-size: 0.85rem;
-    color: #888;
-    border-top: 1px solid #e0e0e0;
-    text-align: center;
-    background-color: #f9f9f9;
-    border-radius: 0 0 10px 10px;
-}
-
-.empty-state {
-    text-align: center;
-    padding: 3rem 1rem;
-    color: #666;
-}
-
-.empty-state h4 {
-    font-size: 1.5rem;
-    margin-bottom: 0.5rem;
-}
-
-.empty-state p {
-    font-size: 1rem;
-}
-</style>

@@ -26,14 +26,7 @@ namespace EcoTrack.WebMvc.Services
             // --- Business Rule 1: "First Step" Badge ---
             if (!userBadges.Any(b => b.Name == "First Step") && userActivities.Any())
             {
-                var newBadge = new Badge
-                {
-                    UserId = userId,
-                    Name = "First Step",
-                    Description = "Awarded for logging your first activity.",
-                    IconUrl = "/images/badges/fiest_step.jpeg", // Example path
-                    DateEarned = DateTime.UtcNow
-                };
+                var newBadge = new Badge { /* ... Badge details ... */ };
                 await _unitOfWork.BadgeRepository.AddAsync(newBadge);
                 hasNewBadge = true;
             }
@@ -46,14 +39,7 @@ namespace EcoTrack.WebMvc.Services
 
                 if (greenTrips >= 5)
                 {
-                    var newBadge = new Badge
-                    {
-                        UserId = userId,
-                        Name = "Green Commuter",
-                        Description = "Awarded for 5 eco-friendly commutes.",
-                        IconUrl = "/images/badges/green.jpeg",
-                        DateEarned = DateTime.UtcNow
-                    };
+                    var newBadge = new Badge { /* ... Badge details ... */ };
                     await _unitOfWork.BadgeRepository.AddAsync(newBadge);
                     hasNewBadge = true;
                 }

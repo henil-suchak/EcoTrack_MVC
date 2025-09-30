@@ -29,3 +29,31 @@ body {
 .form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
   text-align: start;
 }
+
+/* --- Badges Page Styles --- */
+.badges-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1.5rem;
+}
+
+.badge-card {
+    border: 1px solid #e0e0e0;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.badge-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+}
+
+.badge-icon {
+    width: 80px;
+    height: 80px;
+    object-fit: contain;
+}
+
+.empty-state {
+    padding: 3rem 1rem;
+    color: #666;
+}

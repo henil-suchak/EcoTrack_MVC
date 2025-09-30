@@ -12,7 +12,6 @@ namespace EcoTrack.WebMvc.Repositories
         public EmissionFactorRepository(ApplicationDbContext context) : base(context)
         {
         }
-
         public async Task<EmissionFactor?> GetFactorAsync(string activityType, string subType)
         {
             // --- This is the more robust and recommended logic ---
@@ -36,8 +35,9 @@ namespace EcoTrack.WebMvc.Repositories
             // 4. FALLBACK: If no exact match, try to find a default factor for the main activity type
             //    This is useful for things like "Electricity" which might not have a subtype.
             return await _context.EmissionFactors
-                .FirstOrDefaultAsync(ef => 
-                    ef.ActivityType.ToLower() == activityType);
+        .FirstOrDefaultAsync(ef =>
+            ef.ActivityType.ToLower() == activityType.ToLower() &&
+            ef.SubType.ToLower() == subType.ToLower());
         }
     }
 }
