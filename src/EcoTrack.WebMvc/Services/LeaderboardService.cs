@@ -36,9 +36,11 @@ namespace EcoTrack.WebMvc.Services
         {
             DateTime startDate;
             if (period.Equals("Weekly", StringComparison.OrdinalIgnoreCase))
-            {
-                startDate = DateTime.UtcNow.Date.AddDays(-(int)DateTime.UtcNow.DayOfWeek);
-            }
+{
+    int diff = (7 + (DateTime.UtcNow.DayOfWeek - DayOfWeek.Monday)) % 7;
+    startDate = DateTime.UtcNow.Date.AddDays(-diff);
+}
+
             else if (period.Equals("Monthly", StringComparison.OrdinalIgnoreCase))
             {
                 startDate = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, 1);

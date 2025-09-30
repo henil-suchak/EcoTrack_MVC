@@ -1,36 +1,35 @@
-@using EcoTrack.WebMvc.ViewModels
-@model IEnumerable<BadgeViewModel>
+@model IEnumerable<EcoTrack.WebMvc.ViewModels.BadgeViewModel>
 
 @{
     ViewData["Title"] = "My Badges";
 }
 
-<h1 class="mb-4">🏆 @ViewData["Title"]</h1>
+<div class="container badges-container">
+    <h1 class="text-center mb-4">🏆 @ViewData["Title"]</h1>
 
-@if (Model.Any())
-{
-    <div class="row">
-        @foreach (var badge in Model)
-        {
-            <div class="col-md-6 col-lg-4 mb-4">
-                <div class="card h-100 text-center">
-                    <div class="card-body">
-                        <img src="@badge.IconUrl" alt="@badge.Name" width="80" class="mb-3" />
+    @if (Model.Any())
+    {
+        <div class="badges-grid">
+            @foreach (var badge in Model)
+            {
+                <div class="card h-100 text-center badge-card">
+                    <div class="card-body d-flex flex-column justify-content-center align-items-center">
+                        <img src="@badge.IconUrl" alt="@badge.Name" class="badge-icon mb-3" />
                         <h5 class="card-title">@badge.Name</h5>
-                        <p class="card-text">@badge.Description</p>
+                        <p class="card-text text-muted">@badge.Description</p>
                     </div>
-                    <div class="card-footer text-muted">
-                        Earned: @badge.DateEarnedDisplay
+                    <div class="card-footer">
+                        <small>Earned: @badge.DateEarnedDisplay</small>
                     </div>
                 </div>
-            </div>
-        }
-    </div>
-}
-else
-{
-    <div class="text-center">
-        <h4>No Badges Yet!</h4>
-        <p>Keep logging your activities to earn new achievement badges.</p>
-    </div>
-}
+            }
+        </div>
+    }
+    else
+    {
+        <div class="text-center empty-state">
+            <h4>No Badges Yet!</h4>
+            <p>Keep logging your activities to earn new achievement badges.</p>
+        </div>
+    }
+</div>

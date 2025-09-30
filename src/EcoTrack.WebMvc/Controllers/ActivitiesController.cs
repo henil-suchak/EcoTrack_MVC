@@ -30,7 +30,9 @@ namespace EcoTrack.WebMvc.Controllers
         // GET: /Activities/Log
         public IActionResult Log()
         {
-            return View(new LogActivityViewModel());
+            var viewModel = new LogActivityViewModel();
+            // You can pre-populate dropdowns here if needed
+            return View(viewModel);
         }
 
         // POST: /Activities/Log
@@ -102,8 +104,8 @@ namespace EcoTrack.WebMvc.Controllers
                     ApplianceType = viewModel.ApplianceType,
                     WasteType = viewModel.WasteType
                 };
-                
-                // --- Call all necessary services ---
+
+                // 1. Log the new activity and get the created object back
                 var newActivity = await _activityService.LogActivityAsync(activityDto);
                 await _suggestionService.GenerateSuggestionsForActivityAsync(newActivity);
                 await _badgeService.CheckAndAwardBadgesAsync(userId);
