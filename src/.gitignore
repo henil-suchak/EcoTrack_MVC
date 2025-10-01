@@ -21,3 +21,5 @@ appsettings.Development.json
 *.lock.json
 *.db
 *.sqlite
+*.db-shm
+*.db-wal
