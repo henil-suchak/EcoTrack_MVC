@@ -13,7 +13,7 @@ namespace EcoTrack.WebMvc.Data
 
         // --- DbSets ---
         public DbSet<User> Users { get; set; }
-        public DbSet<Family> Families { get; set; }
+       
         public DbSet<Badge> Badges { get; set; }
         public DbSet<Suggestion> Suggestions { get; set; }
         public DbSet<LeaderboardEntry> LeaderboardEntries { get; set; }
@@ -41,12 +41,7 @@ namespace EcoTrack.WebMvc.Data
                 .WithOne(s => s.User)
                 .HasForeignKey(s => s.UserId);
 
-            // --- FAMILY RELATIONSHIP ---
-            modelBuilder.Entity<Family>()
-                .HasMany(f => f.Members)
-                .WithOne(u => u.Family)
-                .HasForeignKey(u => u.FamilyId);
-
+            
             // --- ACTIVITY INHERITANCE CONFIGURATION (TPH) ---
             modelBuilder.Entity<Activity>()
                 .HasDiscriminator<ActivityType>("ActivityType")

@@ -13,7 +13,7 @@ namespace EcoTrack.WebMvc.Repositories
         private ISuggestionRepository? _suggestionRepository;
         private ILeaderboardEntryRepository? _leaderboardEntryRepository; // ADD THIS LINE BACK
         private IEmissionFactorRepository? _emissionFactorRepository;
-        private IFamilyRepository? _familyEntryRepository;
+       
         
 
 
@@ -31,7 +31,7 @@ namespace EcoTrack.WebMvc.Repositories
         public IEmissionFactorRepository EmissionFactorRepository => _emissionFactorRepository ??= new EmissionFactorRepository(_context);
 
         
-        public IFamilyRepository FamilyRepository => _familyEntryRepository ??= new FamilyRepository(_context);
+       
         public async Task<int> CompleteAsync()
         {
             return await _context.SaveChangesAsync();

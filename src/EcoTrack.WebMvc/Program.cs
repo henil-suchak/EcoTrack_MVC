@@ -33,7 +33,6 @@ builder.Services.AddScoped<IActivityRepository, ActivityRepository>();
 builder.Services.AddScoped<IBadgeRepository, BadgeRepository>();
 builder.Services.AddScoped<ISuggestionRepository, SuggestionRepository>();
 builder.Services.AddScoped<ILeaderboardEntryRepository, LeaderboardEntryRepository>();
-builder.Services.AddScoped<IFamilyRepository, FamilyRepository>();
 builder.Services.AddScoped<IEmissionFactorRepository, EmissionFactorRepository>();
 
 // 5. Register the Unit of Work.
