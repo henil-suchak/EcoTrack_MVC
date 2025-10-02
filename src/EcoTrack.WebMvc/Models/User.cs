@@ -26,14 +26,7 @@ namespace EcoTrack.WebMvc.Models
         public string Location { get; set; } = string.Empty;
 
         public string? LifestylePreferences { get; set; }
-        public string? ConnectedAccounts { get; set; }
-
-        // Foreign Key for Family
-        public Guid? FamilyId { get; set; } // CORRECTED to Guid?
         
-        // Navigation property to Family
-        public Family? Family { get; set; }
-
         // Navigation properties for related data
         public ICollection<Activity> Activities { get; set; } = new List<Activity>();
         public ICollection<Suggestion> Suggestions { get; set; } = new List<Suggestion>();

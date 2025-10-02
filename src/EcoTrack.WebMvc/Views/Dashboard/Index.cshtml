@@ -97,6 +97,7 @@
                 </div>
             </div>
 
+            <!-- Weekly Impact -->
             <div class="card shadow-sm rounded-3 mb-4">
                 <div class="card-header fw-semibold">
                     🌱 This Week’s Impact
@@ -143,3 +144,96 @@
         </div>
     </div>
 </div>
+<style>
+/* Dashboard scoped styles */
+#dashboard {
+    font-family: 'Inter', sans-serif;
+    background-color: #F8F9FA;
+    color: #333;
+    line-height: 1.6;
+    padding-bottom: 3rem;
+}
+
+/* Headings */
+#dashboard h1, 
+#dashboard h3, 
+#dashboard .card-header {
+    color: #264653;
+}
+
+/* Cards */
+#dashboard .card {
+    border: none;
+    border-radius: 1rem;
+    background: #ffffff;
+    transition: all 0.3s ease;
+}
+#dashboard .card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Card headers */
+#dashboard .card-header {
+    font-size: 1rem;
+    font-weight: 600;
+    background: #fff;
+    border-bottom: 1px solid #eee;
+}
+
+/* Badges inside activity list */
+#dashboard .badge {
+    font-size: 0.8rem;
+    padding: 0.5em 0.75em;
+}
+
+/* Buttons */
+#dashboard .btn {
+    border-radius: 0.5rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+#dashboard .btn:hover {
+    opacity: 0.9;
+}
+
+/* Button colors */
+#dashboard .bg-green { background-color: #2A9D8F; }
+#dashboard .bg-dark-blue { background-color: #264653; }
+
+/* Outline button */
+#dashboard .btn-outline-primary {
+    border-color: #2A9D8F;
+    color: #2A9D8F;
+}
+#dashboard .btn-outline-primary:hover {
+    background-color: #2A9D8F;
+    color: #fff;
+}
+
+/* List groups */
+#dashboard .list-group-item {
+    border: none;
+    border-bottom: 1px solid #f0f0f0;
+    padding: 0.75rem 1rem;
+}
+#dashboard .list-group-item:last-child {
+    border-bottom: none;
+}
+
+/* Tooltip badges */
+#dashboard [data-bs-toggle="tooltip"] {
+    cursor: pointer;
+}
+
+/* Badge label */
+#dashboard .badge-label {
+    font-size: 0.85rem;
+    color:#333;
+}
+
+/* Badge container */
+#dashboard .card-body .d-flex.flex-wrap > div {
+    min-width: 120px;
+}
+</style>

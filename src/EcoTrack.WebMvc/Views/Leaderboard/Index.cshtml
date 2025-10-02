@@ -3,38 +3,196 @@
 
 @{
     ViewData["Title"] = $"{Model.ActivePeriod} Leaderboard";
-    var currentUserIdString = ViewBag.CurrentUserId as string;
+    var currentUserId = ViewBag.CurrentUserId != null ? Guid.Parse(ViewBag.CurrentUserId) : Guid.Empty;
+    var maxEmission = Model.Entries.Any() ? Model.Entries.Max(e => e.CarbonEmission) : 1;
+    if (maxEmission == 0) maxEmission = 1;
 }
 
-<div class="leaderboard-card">
-    <div class="leaderboard-header">
-        <h2>🏆 Leaderboard</h2>
-        <p>See who's making the biggest impact!</p>
-    </div>
+<div class="leaderboard-container">
+    <div class="leaderboard-card">
+        <div class="leaderboard-header">
+            <h2>🏆 @Model.ActivePeriod Leaderboard</h2>
+            <p>See who's making the biggest impact by reducing their carbon footprint.</p>
+        </div>
 
-    <div class="leaderboard-toggle">
-        <a asp-action="Index" asp-route-period="Weekly" class="btn @(Model.ActivePeriod == "Weekly" ? "btn-primary" : "btn-outline-secondary")">Weekly</a>
-        <a asp-action="Index" asp-route-period="Monthly" class="btn @(Model.ActivePeriod == "Monthly" ? "btn-primary" : "btn-outline-secondary")">Monthly</a>
-    </div>
+        <div class="leaderboard-toggle">
+            <a asp-action="Index" asp-route-period="Monthly"
+               class="toggle-btn @(Model.ActivePeriod == "Monthly" ? "active" : "")">
+                Monthly
+            </a>
+            <a asp-action="Index" asp-route-period="Weekly"
+               class="toggle-btn @(Model.ActivePeriod == "Weekly" ? "active" : "")">
+                Weekly
+            </a>
+        </div>
 
-    @if (Model.Entries.Any())
-    {
-        <div class="leaderboard-list">
-            @foreach (var entry in Model.Entries)
+        <div class="leaderboard-body">
+            @if (Model.Entries.Any())
             {
-                var rowClass = entry.UserId.ToString() == currentUserIdString ? "current-user" : "";
-                <div class="leaderboard-list-item @rowClass">
-                    <div class="rank">#@entry.Rank</div>
-                    <div class="user-name">@entry.UserName</div>
-                    <div class="score">@entry.CarbonEmission.ToString("F2") kg CO₂</div>
-                </div>
+                <ul class="leaderboard-list">
+                    <li class="leaderboard-list-header">
+                        <span class="rank">Rank</span>
+                        <span class="user">User</span>
+                        <span class="score">Total CO₂ Emission</span>
+                    </li>
+                    @foreach (var entry in Model.Entries)
+                    {
+                        var isCurrentUser = entry.UserId == currentUserId;
+                        var progressPercent = (entry.CarbonEmission / maxEmission) * 100;
+
+                        <li class="leaderboard-list-item @(isCurrentUser ? "current-user" : "")">
+                            <span class="rank">
+                                @if (entry.Rank == 1) { <i class="bi bi-trophy-fill gold"></i> }
+                                else if (entry.Rank == 2) { <i class="bi bi-trophy-fill silver"></i> }
+                                else if (entry.Rank == 3) { <i class="bi bi-trophy-fill bronze"></i> }
+                                @entry.Rank
+                            </span>
+                            <span class="user">
+                                <div class="avatar">@entry.UserName.FirstOrDefault()</div>
+                                @entry.UserName
+                            </span>
+                            <span class="score">
+                                <span>@entry.CarbonEmission.ToString("F2") kg</span>
+                                <div class="progress" style="height: 6px;">
+                                    <div class="progress-bar" role="progressbar" style="width: @progressPercent%;" aria-valuenow="@progressPercent" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                            </span>
+                        </li>
+                    }
+                </ul>
+            }
+            else
+            {
+                <p class="text-center p-4">The @Model.ActivePeriod.ToLower() leaderboard is still being calculated. Check back soon!</p>
             }
         </div>
-    }
-    else
-    {
-        <div class="card-body text-center p-5">
-            <p class="lead text-muted">The leaderboard is currently empty. Check back soon!</p>
-        </div>
-    }
+    </div>
 </div>
+
+
+<style>
+   body {
+    background-color: #f5f5f5;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.leaderboard-container {
+    max-width: 1400px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+}
+
+.leaderboard-card {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    overflow: hidden;
+}
+
+.leaderboard-header {
+    background-color: #fff;
+    color: #333;
+    text-align: center;
+    padding: 1.5rem;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.leaderboard-header h2 {
+    margin: 0;
+    font-weight: 600;
+    font-size: 1.8rem;
+}
+
+.leaderboard-header p {
+    margin: 0.5rem 0 0 0;
+    font-size: 1rem;
+    color: #666;
+}
+
+.leaderboard-toggle {
+    display: flex;
+    justify-content: center;
+    padding: 1rem;
+    gap: 1rem;
+}
+
+.toggle-btn {
+    padding: 0.5rem 1.5rem;
+    border-radius: 50px;
+    text-decoration: none;
+    color: #333;
+    font-weight: 500;
+    border: 1px solid #ccc;
+    transition: all 0.3s;
+}
+
+.toggle-btn.active {
+    background-color: #2a9d8f;
+    color: #fff;
+    border-color: #2a9d8f;
+}
+
+.leaderboard-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.leaderboard-list-header,
+.leaderboard-list-item {
+    display: flex;
+    align-items: center;
+    padding: 1rem;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.leaderboard-list-header {
+    font-weight: 600;
+    color: #666;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+}
+
+.leaderboard-list-item:last-child {
+    border-bottom: none;
+}
+
+.rank { flex: 0 0 10%; font-weight: 600; color: #333; }
+.user { flex: 1; display: flex; align-items: center; color: #333; }
+.score { flex: 0 0 25%; text-align: right; font-weight: 600; color: #2a9d8f; }
+
+.avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background-color: #2a9d8f;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 0.8rem;
+    font-weight: 600;
+}
+
+.progress {
+    height: 6px;
+    background-color: #e0e0e0;
+    border-radius: 5px;
+    margin-top: 0.3rem;
+}
+
+.progress-bar {
+    height: 100%;
+    background-color: #2a9d8f;
+    border-radius: 5px;
+}
+
+.leaderboard-list-item.current-user {
+    background-color: #f0fdfd;
+    border-left: 4px solid #2a9d8f;
+    font-weight: 600;
+}
+
+</style> 

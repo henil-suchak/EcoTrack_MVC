@@ -9,8 +9,7 @@ namespace EcoTrack.WebMvc.Interfaces
         ILeaderboardEntryRepository LeaderboardEntryRepository { get; }
 
         IEmissionFactorRepository EmissionFactorRepository { get; }
-        IFamilyRepository FamilyRepository { get; }
-
+       
         Task<int> CompleteAsync();
         // void Save();
     }
