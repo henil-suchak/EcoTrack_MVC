@@ -57,11 +57,8 @@ namespace EcoTrack.WebMvc.Services
             }
 
             // 2. Verify the password
-            // In a real app, you would use a library like BCrypt.Net to compare
-            // the input password with the stored hash.
-            // e.g., bool isPasswordCorrect = BCrypt.Net.BCrypt.Verify(password, user.PasswordHash);
+            
 
-            // This is our temporary placeholder logic for now:
             var hashedPassword = BCrypt.Net.BCrypt.Verify(password, user.PasswordHash);
             if (!hashedPassword)
             {

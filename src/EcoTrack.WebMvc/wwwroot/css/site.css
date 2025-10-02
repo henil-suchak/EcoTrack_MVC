@@ -84,3 +84,14 @@ body {
     border-left: 4px solid #2a9d8f;
     font-weight: 600;
 }
+
+/* --- ADD THESE CUSTOM COLOR HELPERS --- */
+.bg-green {
+    background-color: #2a9d8f !important; /* A nice green from your theme */
+    border-color: #2a9d8f !important;
+}
+
+.bg-dark-blue {
+    background-color: #264653 !important; /* A complementary dark blue */
+    border-color: #264653 !important;
+}

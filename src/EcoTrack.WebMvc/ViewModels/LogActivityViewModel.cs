@@ -10,7 +10,7 @@ namespace EcoTrack.WebMvc.ViewModels
         public ActivityType? ActivityType { get; set; } // Make the enum nullable
 
         // --- Travel Properties ---
-        [Display(Name = "Mode of Transport (e.g., Car, Bus,Train)")]
+        [Display(Name = "Mode of Transport (e.g., Car, Bus,Train,Cycle)")]
         public string? TravelMode { get; set; }
         public decimal? Distance { get; set; }
 

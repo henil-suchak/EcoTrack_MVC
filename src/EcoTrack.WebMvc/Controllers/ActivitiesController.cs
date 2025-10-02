@@ -31,7 +31,7 @@ namespace EcoTrack.WebMvc.Controllers
         public IActionResult Log()
         {
             var viewModel = new LogActivityViewModel();
-            // You can pre-populate dropdowns here if needed
+
             return View(viewModel);
         }
 

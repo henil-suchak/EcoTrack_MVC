@@ -67,7 +67,7 @@ namespace EcoTrack.WebMvc.Services
                 int veggieMeals = userActivities.OfType<FoodActivity>()
                     .Count(f => f.FoodType.ToLower() == "vegetables");
                 
-                if (veggieMeals >= 10)
+                if (veggieMeals >= 1)
                 {
                     // FIXED: Badge details are now filled in
                     var newBadge = new Badge 
