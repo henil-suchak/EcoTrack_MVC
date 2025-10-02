@@ -18,7 +18,8 @@ namespace EcoTrack.WebMvc.Controllers
         {
             // REMOVED: The expensive call to UpdateLeaderboardAsync().
             // This will now be handled automatically by your background service.
-            
+            await _leaderboardService.UpdateLeaderboardAsync(period);
+
             var entries = await _leaderboardService.GetLeaderboardAsync(period, 20); // Show top 20
             
             ViewBag.CurrentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);

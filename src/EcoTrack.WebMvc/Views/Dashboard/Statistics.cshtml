@@ -3,44 +3,78 @@
     ViewData["Title"] = "Emission Statistics";
 }
 
-<div class="d-flex justify-content-between align-items-center">
+<div class="d-flex justify-content-between align-items-center mb-3">
     <div>
-        <h1>@ViewData["Title"]</h1>
-        <p>Select a date range to see your emission statistics for that period.</p>
+        <h1 class="fw-bold text-dark">@ViewData["Title"]</h1>
+        <p class="text-muted">Select a date range to see your emission statistics for that period.</p>
     </div>
     <div>
-        <a asp-action="Index" asp-controller="Dashboard" class="btn btn-secondary">Back to Dashboard</a>
+        <a asp-action="Index" asp-controller="Dashboard" class="btn btn-outline-secondary">
+            ← Back to Dashboard
+        </a>
     </div>
 </div>
-<hr />
 
-<div class="card">
-    <div class="card-body">
-        <form asp-action="Statistics" method="post" class="row g-3 align-items-end">
-            <div class="col-auto">
-                <label asp-for="StartDate" class="form-label"></label>
-                <input asp-for="StartDate" class="form-control" />
+<div class="card shadow-lg border-0 rounded-3">
+    <div class="card-body p-4">
+        <!-- Date Filter Form -->
+        <form asp-action="Statistics" method="post" class="row g-3 align-items-end mb-4">
+            <div class="col-md-4">
+                <label asp-for="StartDate" class="form-label fw-semibold">Start Date</label>
+                <input asp-for="StartDate" type="date" class="form-control shadow-sm" />
             </div>
-            <div class="col-auto">
-                <label asp-for="EndDate" class="form-label"></label>
-                <input asp-for="EndDate" class="form-control" />
+            <div class="col-md-4">
+                <label asp-for="EndDate" class="form-label fw-semibold">End Date</label>
+                <input asp-for="EndDate" type="date" class="form-control shadow-sm" />
             </div>
-            <div class="col-auto">
-                <button type="submit" class="btn btn-primary">Get Stats</button>
+            <div class="col-md-4">
+                <button type="submit" class="btn btn-custom w-100">Get Stats</button>
             </div>
         </form>
+
         <hr />
-        <div class="row text-center mt-3">
-            <div class="col">
-                <h6 class="card-title">Total Emissions</h6>
-                <p class="card-text display-4">@Model.TotalCarbonEmitted.ToString("F2")</p>
-                <p class="card-text"><small class="text-muted">kg CO₂</small></p>
+
+        <!-- Stats Display -->
+        <div class="row text-center mt-4">
+            <!-- Total Emissions -->
+            <div class="col-md-6 mb-3">
+                <div class="stat-box shadow-sm p-4 rounded-3">
+                    <h6 class="fw-semibold text-uppercase text-muted">🌍 Total Emissions</h6>
+                    <p class="display-5 fw-bold text-dark">@Model.TotalCarbonEmitted.ToString("F2")</p>
+                    <p class="mb-0 text-secondary">kg CO₂</p>
+                </div>
             </div>
-            <div class="col">
-                <h6 class="card-title">Activities Logged</h6>
-                <p class="card-text display-4">@Model.NumberOfActivities</p>
-                <p class="card-text"><small class="text-muted">in this period</small></p>
+
+            <!-- Activities Logged -->
+            <div class="col-md-6 mb-3">
+                <div class="stat-box shadow-sm p-4 rounded-3">
+                    <h6 class="fw-semibold text-uppercase text-muted">📌 Activities Logged</h6>
+                    <p class="display-5 fw-bold text-dark">@Model.NumberOfActivities</p>
+                    <p class="mb-0 text-secondary">in this period</p>
+                </div>
             </div>
         </div>
     </div>
 </div>
+
+<!-- Custom Styles -->
+<style>
+    .btn-custom {
+        background-color: #2a9d8f !important;
+        border-color: #2a9d8f !important;
+        color: #fff !important;
+        font-weight: 600;
+    }
+    .btn-custom:hover {
+        background-color: #21867a !important;
+        border-color: #21867a !important;
+    }
+    .stat-box {
+        background: #f9fdfc;
+        border-left: 6px solid #2a9d8f;
+        transition: transform 0.2s ease-in-out;
+    }
+    .stat-box:hover {
+        transform: translateY(-4px);
+    }
+</style>

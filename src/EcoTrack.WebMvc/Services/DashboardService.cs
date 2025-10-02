@@ -27,14 +27,15 @@ namespace EcoTrack.WebMvc.Services
             var suggestions = await _unitOfWork.SuggestionRepository.GetUnreadSuggestionsByUserIdAsync(userId);
             var badges = await _unitOfWork.BadgeRepository.GetBadgesByUserIdAsync(userId);
             var weeklyRank = await _unitOfWork.LeaderboardEntryRepository.GetEntryByUserAsync(userId, "Weekly");
-
+        
             var dashboardData = new DashboardDto
             {
                 UserProfile = user,
                 RecentActivities = user.Activities.OrderByDescending(a => a.DateTime).Take(10),
                 UnreadSuggestions = suggestions,
                 EarnedBadges = badges,
-                WeeklyRankInfo = weeklyRank
+                WeeklyRankInfo = weeklyRank,
+               
             };
 
             return dashboardData;

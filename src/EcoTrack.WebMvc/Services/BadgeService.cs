@@ -32,7 +32,7 @@ namespace EcoTrack.WebMvc.Services
                     UserId = userId,
                     Name = "First Step",
                     Description = "Awarded for logging your first activity.",
-                    IconUrl = "/images/badges/fiest_step.png",
+                    IconUrl = "/images/badges/fiest_step.jpeg",
                     DateEarned = DateTime.UtcNow
                 };
                 await _unitOfWork.BadgeRepository.AddAsync(newBadge);
@@ -43,17 +43,17 @@ namespace EcoTrack.WebMvc.Services
             if (!userBadges.Any(b => b.Name == "Green Commuter"))
             {
                 int greenTrips = userActivities.OfType<TravelActivity>()
-                    .Count(t => t.Mode.ToLower() == "cycle" || t.Mode.ToLower() == "walk");
+                    .Count(t => t.Mode.ToLower() == "cycle");
                 
                 if (greenTrips >= 5)
                 {
-                    // FIXED: Badge details are now filled in
+                    
                     var newBadge = new Badge 
                     { 
                         UserId = userId,
                         Name = "Green Commuter",
                         Description = "Awarded for 5 eco-friendly commutes.",
-                        IconUrl = "/images/badges/green.jpeg",
+                        IconUrl = "/images/badges/cycle.png",
                         DateEarned = DateTime.UtcNow
                     };
                     await _unitOfWork.BadgeRepository.AddAsync(newBadge);
@@ -69,13 +69,13 @@ namespace EcoTrack.WebMvc.Services
                 
                 if (veggieMeals >= 1)
                 {
-                    // FIXED: Badge details are now filled in
+                    
                     var newBadge = new Badge 
                     {
                         UserId = userId,
                         Name = "Veggie Lover",
                         Description = "Awarded for logging 10 vegetable-based meals.",
-                        IconUrl = "/images/badges/veggie_lover.png",
+                        IconUrl = "/images/badges/veggie.png",
                         DateEarned = DateTime.UtcNow
                     };
                     await _unitOfWork.BadgeRepository.AddAsync(newBadge);

@@ -24,7 +24,7 @@ namespace EcoTrack.WebMvc.ViewModels
         public decimal? ElectricityConsumption { get; set; }
 
         // --- Appliance Properties ---
-        [Display(Name = "Appliance Type (e.g., Fridge, AC,Grid)")]
+        [Display(Name = "Appliance Type (e.g., Fridge, AC)")]
         public string? ApplianceType { get; set; }
         [Display(Name = "Usage Time (hours)")]
         public decimal? UsageTime { get; set; }

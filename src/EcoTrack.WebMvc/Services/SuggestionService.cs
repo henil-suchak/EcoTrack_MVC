@@ -63,7 +63,7 @@ namespace EcoTrack.WebMvc.Services
                     switch (food.FoodType.ToLower()) // Check the specific food type
                     {
                         case "beef":
-                        case "lamb":
+                    
                             suggestionText = "Reducing red meat consumption is a great way to lower your footprint. How about trying chicken or vegetables?";
                             break;
                         case "chicken":
@@ -93,16 +93,35 @@ namespace EcoTrack.WebMvc.Services
                     }
                     break;
                 case ApplianceActivity appliance:
-                    category = "Appliance";
-                    // Example: Suggest an alternative if a high-power appliance is used for a long time
-                    if (appliance.ApplianceType.ToLower() == "ac" && appliance.UsageTime > 2)
-                    {
-                        suggestionText = "Using your AC contributes to your footprint. Consider using a fan or setting the thermostat a few degrees higher.";
-                    }
-                    else if (appliance.PowerRating > 1500) // For any other high-power appliance
-                    {
-                        suggestionText = "High-power appliances can use a lot of energy. Remember to turn them off when not in use!";
-                    }
+                   var suggestions = new List<string>();
+
+    if (appliance.ApplianceType.ToLower() == "ac" && appliance.UsageTime > 2)
+    {
+        suggestions.Add("Using your AC contributes to your footprint. Consider using a fan or setting the thermostat a few degrees higher.");
+    }
+
+    if (appliance.PowerRating > 1500)
+    {
+        suggestions.Add("High-power appliances can use a lot of energy. Remember to turn them off when not in use!");
+    }
+
+    foreach (var text in suggestions)
+    {
+        var newSuggestion = new Suggestion
+        {
+            SuggestionId = Guid.NewGuid(),
+            UserId = activity.UserId,
+            Description = text,
+            Category = category,
+            SavingAmount = 0,
+            IsRead = false,
+            DateTimeIssued = DateTime.UtcNow
+        };
+        await _unitOfWork.SuggestionRepository.AddAsync(newSuggestion);
+    }
+
+    if (suggestions.Count > 0)
+        await _unitOfWork.CompleteAsync();
                     break;
 
             }

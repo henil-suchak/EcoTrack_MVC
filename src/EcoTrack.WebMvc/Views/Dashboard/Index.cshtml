@@ -85,11 +85,7 @@
                     <p class="fs-4 text-success">
                         @(Model.WeeklyRankInfo?.Rank.ToString() ?? "N/A")
                     </p>
-                    <hr />
-                    <h6 class="fw-bold">Monthly Rank</h6>
-                    <p class="fs-4 text-muted">
-                        @(Model.MonthlyRankInfo?.Rank.ToString() ?? "N/A")
-                    </p>
+                    
                 </div>
                 <div class="card-footer bg-white">
                     <a asp-controller="Leaderboard" asp-action="Index" 
@@ -97,18 +93,8 @@
                 </div>
             </div>
 
-            <!-- Weekly Impact -->
-            <div class="card shadow-sm rounded-3 mb-4">
-                <div class="card-header fw-semibold">
-                    🌱 This Week’s Impact
-                </div>
-                <div class="card-body">
-                    <p><strong>CO₂ Saved:</strong> <span class="text-success">15.2 kg (≈ planting 3 trees)</span></p>
-                    <p><strong>Fuel Saved:</strong> <span class="text-success">6.5 liters</span></p>
-                </div>
-            </div>
-        </div>
-    </div>
+            
+            
 
     <div class="row mt-4">
         <div class="col-12">

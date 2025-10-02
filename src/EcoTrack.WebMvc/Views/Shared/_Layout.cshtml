@@ -6,35 +6,54 @@
     <title>@ViewData["Title"] - EcoTrack</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <style>
+        /* Logo styling */
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            font-weight: bold;
+            font-size: 1.5rem;
+        }
+        .navbar-brand img {
+            height: 35px;
+            margin-right: 8px;
+        }
+
+        /* Active nav link highlighting */
+        .nav-link.active, .nav-link:hover {
+            color: #2A9D8F !important; /* Green hover color */
+            font-weight: bold;
+        }
+    </style>
 </head>
 <body>
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container-fluid">
-                <a class="navbar-brand" asp-controller="Home" asp-action="Index">🌍 EcoTrack</a>
+                <a class="navbar-brand" asp-controller="Home" asp-action="Index">
+                   
+                   
+                    🌍 EcoTrack
+                </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
-                        @* <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Home" asp-action="Index">Home</a>
-                        </li> *@
-                        
                         @if (User.Identity != null && User.Identity.IsAuthenticated)
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-controller="Dashboard" asp-action="Index">My Dashboard</a>
+                                <a class="nav-link @(ViewData["Title"]?.ToString() == "Dashboard" ? "active" : "")" asp-controller="Dashboard" asp-action="Index">My Dashboard</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-controller="Activities" asp-action="Log">Log Activity</a>
+                                <a class="nav-link @(ViewData["Title"]?.ToString() == "Log Activity" ? "active" : "")" asp-controller="Activities" asp-action="Log">Log Activity</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-controller="Suggestions" asp-action="Index">My Suggestions</a>
+                                <a class="nav-link @(ViewData["Title"]?.ToString() == "My Suggestions" ? "active" : "")" asp-controller="Suggestions" asp-action="Index">My Suggestions</a>
                             </li>
-                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-controller="Leaderboard" asp-action="Index">Leaderboard</a>
+                            <li class="nav-item">
+                                <a class="nav-link @(ViewData["Title"]?.ToString() == "Leaderboard" ? "active" : "")" asp-controller="Leaderboard" asp-action="Index">Leaderboard</a>
                             </li>
                         }
                     </ul>
@@ -44,6 +63,7 @@
             </div>
         </nav>
     </header>
+
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()
@@ -55,6 +75,7 @@
             &copy; 2025 - EcoTrack.WebMvc - <a asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
