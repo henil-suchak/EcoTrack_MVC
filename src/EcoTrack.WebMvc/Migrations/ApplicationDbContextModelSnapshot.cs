@@ -120,6 +120,14 @@ namespace EcoTrack.WebMvc.Migrations
                     b.HasData(
                         new
                         {
+                            EmissionFactorId = new Guid("00000000-0000-0000-0000-000000000001"),
+                            ActivityType = "Travel",
+                            SourceReference = "System",
+                            SubType = "Cycle",
+                            Value = 0m
+                        },
+                        new
+                        {
                             EmissionFactorId = new Guid("0a0a0a0a-0000-0000-0000-000000000001"),
                             ActivityType = "Travel",
                             SourceReference = "Default",
@@ -208,25 +216,6 @@ namespace EcoTrack.WebMvc.Migrations
                         });
                 });
 
-            modelBuilder.Entity("EcoTrack.WebMvc.Models.Family", b =>
-                {
-                    b.Property<Guid>("FamilyId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("FamilyName")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("SharedConsumption")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("FamilyId");
-
-                    b.ToTable("Families");
-                });
-
             modelBuilder.Entity("EcoTrack.WebMvc.Models.LeaderboardEntry", b =>
                 {
                     b.Property<int>("LeaderboardEntryId")
@@ -301,15 +290,9 @@ namespace EcoTrack.WebMvc.Migrations
                     b.Property<int>("Age")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("ConnectedAccounts")
-                        .HasColumnType("TEXT");
-
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasMaxLength(150)
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid?>("FamilyId")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("LifestylePreferences")
@@ -330,8 +313,6 @@ namespace EcoTrack.WebMvc.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasKey("UserId");
-
-                    b.HasIndex("FamilyId");
 
                     b.ToTable("Users");
                 });
@@ -524,15 +505,6 @@ namespace EcoTrack.WebMvc.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("EcoTrack.WebMvc.Models.User", b =>
-                {
-                    b.HasOne("EcoTrack.WebMvc.Models.Family", "Family")
-                        .WithMany("Members")
-                        .HasForeignKey("FamilyId");
-
-                    b.Navigation("Family");
-                });
-
             modelBuilder.Entity("EcoTrack.WebMvc.Models.ApplianceActivity", b =>
                 {
                     b.HasOne("EcoTrack.WebMvc.Models.EmissionFactor", "EmissionFactor")
@@ -586,11 +558,6 @@ namespace EcoTrack.WebMvc.Migrations
                         .IsRequired();
 
                     b.Navigation("EmissionFactor");
-                });
-
-            modelBuilder.Entity("EcoTrack.WebMvc.Models.Family", b =>
-                {
-                    b.Navigation("Members");
                 });
 
             modelBuilder.Entity("EcoTrack.WebMvc.Models.User", b =>

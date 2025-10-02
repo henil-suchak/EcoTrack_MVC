@@ -5,7 +5,7 @@ namespace EcoTrack.WebMvc.Interfaces
 {
     public interface IUserService
     {
-        Task<User> RegisterUserAsync(string name, string email, string password);
+        Task<User> RegisterUserAsync(string name, string email, string password, int age, string location, string? lifestylePreferences);
         Task<User?> LoginAsync(string email, string password); 
 
         Task UpdateUserAsync(UserEditViewModel viewModel);

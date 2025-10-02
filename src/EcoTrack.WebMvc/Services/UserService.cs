@@ -15,33 +15,29 @@ namespace EcoTrack.WebMvc.Services
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<User> RegisterUserAsync(string name, string email, string password)
+        public async Task<User> RegisterUserAsync(string name, string email, string password, int age, string location, string? lifestylePreferences)
         {
-            // 1. Business Rule: Check if a user with this email already exists.
             var existingUser = await _unitOfWork.UserRepository.GetUserByEmailAsync(email);
             if (existingUser != null)
             {
                 throw new InvalidOperationException("A user with this email already exists.");
             }
 
-            // 2. Business Rule: Hash the password (CRITICAL FOR SECURITY)
-            // NEVER store plain-text passwords. This is a placeholder.
-            // In a real app, you would use a library like BCrypt.Net here.
-            var hashedPassword = BCrypt.Net.BCrypt.HashPassword(password); // TODO: Replace with real hashing logic
+            var hashedPassword = BCrypt.Net.BCrypt.HashPassword(password);
 
-            // 3. Create the new User entity
             var newUser = new User
             {
-                UserId = Guid.NewGuid(), // Generate a new Guid for the user
+                UserId = Guid.NewGuid(),
                 Name = name,
                 Email = email,
-                PasswordHash = hashedPassword
+                PasswordHash = hashedPassword,
+                // ADDED: Set the new properties
+                Age = age,
+                Location = location,
+                LifestylePreferences = lifestylePreferences
             };
 
-            // 4. Add the new user via the repository
             await _unitOfWork.UserRepository.AddAsync(newUser);
-
-            // 5. Save all changes to the database
             await _unitOfWork.CompleteAsync();
 
             return newUser;

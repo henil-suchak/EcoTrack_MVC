@@ -20,6 +20,10 @@ namespace EcoTrack.WebMvc.ViewModels
         [StringLength(150)]
         public string Location { get; set; } = string.Empty;
 
+        // ADDED: LifestylePreferences property
+        [Display(Name = "Lifestyle Preferences (e.g., Vegetarian, Commuter)")]
+        public string? LifestylePreferences { get; set; }
+
         [Required]
         [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
         [DataType(DataType.Password)]

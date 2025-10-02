@@ -33,25 +33,34 @@ namespace EcoTrack.WebMvc.Controllers
             return View(new UserRegistrationViewModel());
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Register(UserRegistrationViewModel viewModel)
+        // Inside the [HttpPost] Register action...
+[HttpPost]
+[ValidateAntiForgeryToken]
+public async Task<IActionResult> Register(UserRegistrationViewModel viewModel)
+{
+    if (ModelState.IsValid)
+    {
+        try
         {
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    var newUser = await _userService.RegisterUserAsync(viewModel.Name, viewModel.Email, viewModel.Password);
-                    await SignInUserAsync(newUser); // Automatically sign in after registration
-                    return RedirectToAction("Index", "Dashboard");
-                }
-                catch (InvalidOperationException ex)
-                {
-                    ModelState.AddModelError("Email", ex.Message);
-                }
-            }
-            return View(viewModel);
+            // UPDATED: Pass all the view model properties to the service
+            var newUser = await _userService.RegisterUserAsync(
+                viewModel.Name, 
+                viewModel.Email, 
+                viewModel.Password,
+                viewModel.Age,
+                viewModel.Location,
+                viewModel.LifestylePreferences); // Add this if you add the field to the viewmodel
+
+            await SignInUserAsync(newUser);
+            return RedirectToAction("Index", "Dashboard");
         }
+        catch (InvalidOperationException ex)
+        {
+            ModelState.AddModelError("Email", ex.Message);
+        }
+    }
+    return View(viewModel);
+}
 
         // --- LOGIN & LOGOUT ---
         [HttpGet]

@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace EcoTrack.WebMvc.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class FixEmissionFactorSeedData : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -30,19 +30,6 @@ namespace EcoTrack.WebMvc.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Families",
-                columns: table => new
-                {
-                    FamilyId = table.Column<Guid>(type: "TEXT", nullable: false),
-                    FamilyName = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
-                    SharedConsumption = table.Column<string>(type: "TEXT", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Families", x => x.FamilyId);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Users",
                 columns: table => new
                 {
@@ -52,18 +39,11 @@ namespace EcoTrack.WebMvc.Migrations
                     Email = table.Column<string>(type: "TEXT", maxLength: 150, nullable: false),
                     PasswordHash = table.Column<string>(type: "TEXT", nullable: false),
                     Location = table.Column<string>(type: "TEXT", maxLength: 150, nullable: false),
-                    LifestylePreferences = table.Column<string>(type: "TEXT", nullable: true),
-                    ConnectedAccounts = table.Column<string>(type: "TEXT", nullable: true),
-                    FamilyId = table.Column<Guid>(type: "TEXT", nullable: true)
+                    LifestylePreferences = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Users", x => x.UserId);
-                    table.ForeignKey(
-                        name: "FK_Users_Families_FamilyId",
-                        column: x => x.FamilyId,
-                        principalTable: "Families",
-                        principalColumn: "FamilyId");
                 });
 
             migrationBuilder.CreateTable(
@@ -104,13 +84,13 @@ namespace EcoTrack.WebMvc.Migrations
                         column: x => x.ElectricityActivity_EmissionFactorId,
                         principalTable: "EmissionFactors",
                         principalColumn: "EmissionFactorId",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Activities_EmissionFactors_EmissionFactorId",
                         column: x => x.EmissionFactorId,
                         principalTable: "EmissionFactors",
                         principalColumn: "EmissionFactorId",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Activities_EmissionFactors_FoodActivity_EmissionFactorId",
                         column: x => x.FoodActivity_EmissionFactorId,
@@ -128,7 +108,7 @@ namespace EcoTrack.WebMvc.Migrations
                         column: x => x.WasteActivity_EmissionFactorId,
                         principalTable: "EmissionFactors",
                         principalColumn: "EmissionFactorId",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Activities_Users_UserId",
                         column: x => x.UserId,
@@ -211,9 +191,18 @@ namespace EcoTrack.WebMvc.Migrations
                 columns: new[] { "EmissionFactorId", "ActivityType", "Region", "SourceReference", "SubType", "Value" },
                 values: new object[,]
                 {
-                    { new Guid("00000000-0000-0000-0000-000000000001"), "Travel", null, "Default", "Car", 0.21m },
-                    { new Guid("00000000-0000-0000-0000-000000000002"), "Food", null, "Default", "Beef", 27.0m },
-                    { new Guid("00000000-0000-0000-0000-000000000003"), "Food", null, "Default", "Chicken", 6.9m }
+                    { new Guid("00000000-0000-0000-0000-000000000001"), "Travel", null, "System", "Cycle", 0m },
+                    { new Guid("0a0a0a0a-0000-0000-0000-000000000001"), "Travel", null, "Default", "Car", 0.21m },
+                    { new Guid("0a0a0a0a-0000-0000-0000-000000000002"), "Travel", null, "Default", "Bus", 0.10m },
+                    { new Guid("0a0a0a0a-0000-0000-0000-000000000003"), "Travel", null, "Default", "Train", 0.04m },
+                    { new Guid("0b0b0b0b-0000-0000-0000-000000000001"), "Food", null, "Default", "Beef", 27.0m },
+                    { new Guid("0b0b0b0b-0000-0000-0000-000000000002"), "Food", null, "Default", "Chicken", 6.9m },
+                    { new Guid("0b0b0b0b-0000-0000-0000-000000000003"), "Food", null, "Default", "Vegetables", 2.0m },
+                    { new Guid("0c0c0c0c-0000-0000-0000-000000000001"), "Electricity", null, "Default", "Grid", 0.45m },
+                    { new Guid("0d0d0d0d-0000-0000-0000-000000000001"), "Appliance", null, "Default", "Fridge", 0.45m },
+                    { new Guid("0d0d0d0d-0000-0000-0000-000000000002"), "Appliance", null, "Default", "AC", 0.45m },
+                    { new Guid("0e0e0e0e-0000-0000-0000-000000000001"), "Waste", null, "Default", "Landfill", 0.60m },
+                    { new Guid("0e0e0e0e-0000-0000-0000-000000000002"), "Waste", null, "Default", "Recyclable", 0.10m }
                 });
 
             migrationBuilder.CreateIndex(
@@ -260,11 +249,6 @@ namespace EcoTrack.WebMvc.Migrations
                 name: "IX_Suggestions_UserId",
                 table: "Suggestions",
                 column: "UserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Users_FamilyId",
-                table: "Users",
-                column: "FamilyId");
         }
 
         /// <inheritdoc />
@@ -287,9 +271,6 @@ namespace EcoTrack.WebMvc.Migrations
 
             migrationBuilder.DropTable(
                 name: "Users");
-
-            migrationBuilder.DropTable(
-                name: "Families");
         }
     }
 }
