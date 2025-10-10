@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EcoTrack.WebMvc.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20251002103823_FixEmissionFactorSeedData")]
-    partial class FixEmissionFactorSeedData
+    [Migration("20251003041435_ProjectDatabase")]
+    partial class ProjectDatabase
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

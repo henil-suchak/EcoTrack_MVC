@@ -11,7 +11,7 @@ namespace EcoTrack.WebMvc.ViewModels
         public string Location { get; set; } = string.Empty;
         public string? LifestylePreferences { get; set; }
         
-        // Example of showing related data counts
+
         public int TotalActivitiesLogged { get; set; }
         public int BadgesEarned { get; set; }
     }

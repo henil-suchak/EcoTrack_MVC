@@ -11,11 +11,11 @@ namespace EcoTrack.WebMvc.ViewModels
         public DateTime DateTime { get; set; }
         public string UserName { get; set; } = string.Empty;
 
-        // CORRECTED: Added an abstract method to generate a description
+
         public abstract string GetDescription();
     }
 
-    // Specific ViewModels that implement the method
+
     public class TravelActivityViewModel : ActivityViewModel
     {
         public string Mode { get; set; } = string.Empty;

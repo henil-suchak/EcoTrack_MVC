@@ -31,7 +31,7 @@ namespace EcoTrack.WebMvc.Services
                 Name = name,
                 Email = email,
                 PasswordHash = hashedPassword,
-                // ADDED: Set the new properties
+
                 Age = age,
                 Location = location,
                 LifestylePreferences = lifestylePreferences
@@ -42,36 +42,35 @@ namespace EcoTrack.WebMvc.Services
 
             return newUser;
         }
-        // In src/EcoTrack.WebMvc/Services/UserService.cs
         public async Task<User?> LoginAsync(string email, string password)
         {
-            // 1. Find the user by email using the repository
+
             var user = await _unitOfWork.UserRepository.GetUserByEmailAsync(email);
             if (user == null)
             {
-                return null; // User not found
+                return null;
             }
 
-            // 2. Verify the password
+
             
 
             var hashedPassword = BCrypt.Net.BCrypt.Verify(password, user.PasswordHash);
             if (!hashedPassword)
             {
-                return null; // Password does not match
+                return null; 
             }
 
-            // 3. If password is correct, return the user object
+
             return user;
         }
-        // In your UserService class, add this new method:
+
         public async Task UpdateUserAsync(UserEditViewModel viewModel)
         {
             var user = await _unitOfWork.UserRepository.GetByIdAsync(viewModel.UserId);
 
             if (user != null)
             {
-                // Update the properties from the ViewModel
+
                 user.Name = viewModel.Name;
                 user.Age = viewModel.Age;
                 user.Location = viewModel.Location;

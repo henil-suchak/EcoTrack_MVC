@@ -42,15 +42,14 @@ public async Task<IActionResult> Register(UserRegistrationViewModel viewModel)
     {
         try
         {
-            // UPDATED: Pass all the view model properties to the service
+
             var newUser = await _userService.RegisterUserAsync(
                 viewModel.Name, 
                 viewModel.Email, 
                 viewModel.Password,
                 viewModel.Age,
                 viewModel.Location,
-                viewModel.LifestylePreferences); // Add this if you add the field to the viewmodel
-
+                viewModel.LifestylePreferences); 
             await SignInUserAsync(newUser);
             return RedirectToAction("Index", "Dashboard");
         }

@@ -23,7 +23,7 @@ namespace EcoTrack.WebMvc.Controllers
             _mapper = mapper;
         }
 
-        // UPDATED: The Index action now accepts a boolean parameter
+
         public async Task<IActionResult> Index(bool showAll = false)
         {
             var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -35,14 +35,14 @@ namespace EcoTrack.WebMvc.Controllers
             IEnumerable<Suggestion> suggestions;
             if (showAll)
             {
-                // If showAll is true, get all suggestions
+
                 suggestions = await _suggestionService.GetAllSuggestionsAsync(userId);
                 ViewBag.Title = "All Suggestions";
                 ViewBag.ShowAll = true;
             }
             else
             {
-                // Otherwise, just get the unread ones
+
                 suggestions = await _suggestionService.GetUnreadSuggestionsAsync(userId);
                 ViewBag.Title = "New Suggestions";
                 ViewBag.ShowAll = false;
@@ -53,7 +53,7 @@ namespace EcoTrack.WebMvc.Controllers
             return View(viewModel);
         }
 
-        // MarkAsRead method remains the same
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> MarkAsRead(Guid suggestionId)

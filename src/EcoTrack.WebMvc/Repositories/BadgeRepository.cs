@@ -15,7 +15,7 @@ namespace EcoTrack.WebMvc.Repositories
         {
         }
 
-        // Implementation for the custom method defined in the interface.
+
         public async Task<IEnumerable<Badge>> GetBadgesByUserIdAsync(Guid userId)
         {
             return await _context.Badges

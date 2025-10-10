@@ -23,7 +23,7 @@ namespace EcoTrack.WebMvc.Controllers
         }
 
         // GET: /Dashboard
-        // This is your main dashboard page.
+
         public async Task<IActionResult> Index()
         {
             var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -42,10 +42,10 @@ namespace EcoTrack.WebMvc.Controllers
             return View(viewModel);
         }
 
-        // --- NEW STATISTICS ACTIONS ---
+
 
         // GET: /Dashboard/Statistics
-        // This action shows the statistics page with a default date range (last 7 days).
+
         [HttpGet]
         public async Task<IActionResult> Statistics()
         {
@@ -60,7 +60,7 @@ namespace EcoTrack.WebMvc.Controllers
         }
 
         // POST: /Dashboard/Statistics
-        // This action handles the custom date range form submission.
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Statistics(DashboardStatsViewModel statsViewModel)
@@ -71,10 +71,10 @@ namespace EcoTrack.WebMvc.Controllers
                 return Unauthorized();
             }
 
-            // Get the stats for the custom date range provided by the user.
+
             var newStatsViewModel = await _dashboardService.GetUserStatsAsync(userId, statsViewModel.StartDate, statsViewModel.EndDate);
             
-            // Return the same view, but now populated with the new stats.
+
             return View(newStatsViewModel);
         }
     }

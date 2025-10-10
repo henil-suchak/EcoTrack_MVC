@@ -31,7 +31,7 @@ namespace EcoTrack.WebMvc.Repositories
                 .FirstOrDefaultAsync(e => e.UserId == userId && e.Period == period);
         }
 
-        // ADD THIS IMPLEMENTATION
+
         public async Task<IEnumerable<LeaderboardEntry>> GetEntriesByPeriodAsync(string period)
         {
             return await _context.LeaderboardEntries

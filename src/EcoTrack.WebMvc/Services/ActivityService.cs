@@ -23,7 +23,7 @@ namespace EcoTrack.WebMvc.Services
                 throw new ArgumentNullException(nameof(dto));
             }
 
-            // Create the specific activity object based on the DTO
+
             Activity newActivity;
             switch (dto.ActivityType)
             {
@@ -59,7 +59,7 @@ namespace EcoTrack.WebMvc.Services
                 throw new InvalidOperationException($"Could not find a valid emission factor for {newActivity.ActivityType} with subtype {subType}.");
             }
 
-            // Use a switch statement to safely assign the EmissionFactorId
+
             switch (newActivity)
             {
                 case TravelActivity ta: ta.EmissionFactorId = factor.EmissionFactorId; break;

@@ -20,7 +20,7 @@ namespace EcoTrack.WebMvc.ViewModels
         [StringLength(150)]
         public string Location { get; set; } = string.Empty;
 
-        // ADDED: LifestylePreferences property
+
         [Display(Name = "Lifestyle Preferences (e.g., Vegetarian, Commuter)")]
         public string? LifestylePreferences { get; set; }
 

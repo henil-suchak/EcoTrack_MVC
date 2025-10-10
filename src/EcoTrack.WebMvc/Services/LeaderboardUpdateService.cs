@@ -21,7 +21,7 @@ namespace EcoTrack.WebMvc.Services
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            // Run the calculation every hour
+
             using var timer = new PeriodicTimer(TimeSpan.FromHours(1));
 
             while (await timer.WaitForNextTickAsync(stoppingToken))
@@ -30,11 +30,11 @@ namespace EcoTrack.WebMvc.Services
                 {
                     _logger.LogInformation("Leaderboard update job is running.");
 
-                    // We must create a "scope" to get our services in a background task
+
                     await using var scope = _serviceProvider.CreateAsyncScope();
                     var leaderboardService = scope.ServiceProvider.GetRequiredService<ILeaderboardService>();
 
-                    // Call the update method for both periods
+
                     await leaderboardService.UpdateLeaderboardAsync("Weekly");
                     await leaderboardService.UpdateLeaderboardAsync("Monthly");
 

@@ -5,7 +5,7 @@ namespace EcoTrack.WebMvc.ViewModels
 {
     public class UserEditViewModel
     {
-        // Hidden field in the form to identify the user
+
         public Guid UserId { get; set; }
 
         [Required]

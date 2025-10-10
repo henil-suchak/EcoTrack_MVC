@@ -15,8 +15,7 @@ namespace EcoTrack.WebMvc.Repositories
         {
         }
 
-        // Implementation for the custom method.
-        // It filters for the user AND where IsRead is false.
+        
         public async Task<IEnumerable<Suggestion>> GetUnreadSuggestionsByUserIdAsync(Guid userId)
         {
             return await _context.Suggestions

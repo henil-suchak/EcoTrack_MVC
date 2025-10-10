@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using EcoTrack.WebMvc.Interfaces;
 using EcoTrack.WebMvc.Models;
-using EcoTrack.WebMvc.ViewModels; // Make sure you have this using statement
+using EcoTrack.WebMvc.ViewModels;
 
 namespace EcoTrack.WebMvc.Services
 {

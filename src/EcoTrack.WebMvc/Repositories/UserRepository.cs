@@ -14,16 +14,16 @@ namespace EcoTrack.WebMvc.Repositories
         {
         }
 
-        // --- ADD THIS METHOD IMPLEMENTATION ---
+
         public async Task<User?> GetUserByEmailAsync(string email)
         {
-            // FirstOrDefaultAsync will return the matching user or null if no user is found.
+
             return await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
         }
         public async Task<User?> GetUserWithActivitiesAsync(Guid userId)
         {
             return await _context.Users
-                .Include(u => u.Activities) // Eagerly load the Activities collection
+                .Include(u => u.Activities)
                 .FirstOrDefaultAsync(u => u.UserId == userId);
         }
     }

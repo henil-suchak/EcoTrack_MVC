@@ -32,7 +32,7 @@ namespace EcoTrack.WebMvc.Services
                     UserId = userId,
                     Name = "First Step",
                     Description = "Awarded for logging your first activity.",
-                    IconUrl = "/images/badges/fiest_step.jpeg",
+                    IconUrl = "/images/badges/first_step.jpeg",
                     DateEarned = DateTime.UtcNow
                 };
                 await _unitOfWork.BadgeRepository.AddAsync(newBadge);
@@ -47,7 +47,7 @@ namespace EcoTrack.WebMvc.Services
                 
                 if (greenTrips >= 5)
                 {
-                    
+                     
                     var newBadge = new Badge 
                     { 
                         UserId = userId,

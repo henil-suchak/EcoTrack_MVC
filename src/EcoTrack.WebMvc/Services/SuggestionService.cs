@@ -37,13 +37,13 @@ namespace EcoTrack.WebMvc.Services
             string? suggestionText = null;
             string category = "";
 
-            // Use a switch to create a specific suggestion for the logged activity
+
             switch (activity)
             {
-                // UPDATED: This case now has its own switch for subtypes
+
                 case TravelActivity travel:
                     category = "Travel";
-                    switch (travel.Mode.ToLower()) // Check the specific mode
+                    switch (travel.Mode.ToLower()) 
                     {
                         case "car" when travel.Distance < 5:
                             suggestionText = "We noticed you took a short car trip. Try cycling or walking next time!";
@@ -57,10 +57,10 @@ namespace EcoTrack.WebMvc.Services
                     }
                     break;
 
-                // UPDATED: This case now handles multiple food subtypes
+
                 case FoodActivity food:
                     category = "Food";
-                    switch (food.FoodType.ToLower()) // Check the specific food type
+                    switch (food.FoodType.ToLower()) 
                     {
                         case "beef":
                     
@@ -75,14 +75,14 @@ namespace EcoTrack.WebMvc.Services
                     }
                     break;
 
-                case ElectricityActivity electricity when electricity.Consumption > 20: // e.g., > 20 kWh in one go
+                case ElectricityActivity electricity when electricity.Consumption > 20: 
                     suggestionText = "High electricity usage can be reduced by switching to LED bulbs and energy-efficient appliances.";
                     category = "Electricity";
                     break;
 
                 case WasteActivity waste:
                     category = "Waste";
-                    switch (waste.WasteType.ToLower()) // Check the specific waste type
+                    switch (waste.WasteType.ToLower()) 
                     {
                         case "landfill" when waste.Amount > 2:
                             suggestionText = "Composting food scraps and choosing products with less packaging can greatly reduce landfill waste.";
@@ -126,7 +126,7 @@ namespace EcoTrack.WebMvc.Services
 
             }
 
-            // If a relevant suggestion was found, create and save it.
+
             if (!string.IsNullOrEmpty(suggestionText))
             {
                 var newSuggestion = new Suggestion
@@ -135,7 +135,7 @@ namespace EcoTrack.WebMvc.Services
                     UserId = activity.UserId,
                     Description = suggestionText,
                     Category = category,
-                    SavingAmount = 0, // You can calculate a more specific saving later
+                    SavingAmount = 0, 
                     IsRead = false,
                     DateTimeIssued = DateTime.UtcNow
                 };

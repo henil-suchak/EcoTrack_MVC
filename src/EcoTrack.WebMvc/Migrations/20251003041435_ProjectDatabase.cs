@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace EcoTrack.WebMvc.Migrations
 {
     /// <inheritdoc />
-    public partial class FixEmissionFactorSeedData : Migration
+    public partial class ProjectDatabase : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
