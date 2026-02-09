@@ -1,14 +1,9 @@
-Of course. Here is a more polished and professional version of your README file. It includes a better structure, badges, and more engaging formatting.
 
------
-
-\<div align="center"\>
 
 # 🌍 EcoTrack: Carbon Footprint Calculator
 
 **Measure your environmental impact, gain actionable insights, and join a community dedicated to sustainability.**
 
-\</div\>
 
 EcoTrack is a modern web application built with ASP.NET Core MVC designed to help users measure, understand, and reduce their personal carbon footprint. By logging daily activities like travel, food consumption, and energy use, users get actionable insights and can engage in friendly competition to promote environmental sustainability.
 
